@@ -32,51 +32,53 @@ console.log("SparkViewer.js included");
 
     var head = document.getElementsByTagName("head")[0];
 
+    var subFolders = "SparkViewer/";
+
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/Renderer.js";
+    js.src = scriptFolder + "subFolders Renderer.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/glMatrix.js";
+    js.src = scriptFolder + "subFolders glMatrix.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/RendererUtils.js";
+    js.src = scriptFolder + "subFolders RendererUtils.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/RenderMaterial.js";
+    js.src = scriptFolder + "subFolders RenderMaterial.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/RenderMesh.js";
+    js.src = scriptFolder + "subFolders RenderMesh.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/RenderModel.js";
+    js.src = scriptFolder + "subFolders RenderModel.js";
 
     head.appendChild(js);
 
     var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/RenderTypes.js";
+    js.src = scriptFolder + "subFolders RenderTypes.js";
 
     head.appendChild(js);
 	
-	var js = document.createElement("script");
+    var js = document.createElement("script");
     js.type = "text/javascript";
-    js.src = scriptFolder + "/SparkViewer/math/Vector2.js";
+    js.src = scriptFolder + "subFolders/math/Vector2.js";
 
     head.appendChild(js);
 
