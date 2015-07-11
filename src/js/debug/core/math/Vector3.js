@@ -22,7 +22,7 @@
 
 var Vector3 = {};
 
-Vecotr3.create = function(x, y, z) {
+Vector3.create = function(x, y, z) {
 	var out = new Array(3);
 	
 	out[0] = x || 0;
@@ -135,7 +135,7 @@ Vector3.length = function(a) {
 	return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
 };
 
-Vector.squaredLength = function(a) {
+Vector3.squaredLength = function(a) {
 	return a[0] * a[0] + a[1] * a[1] + a[2] * a[2];
 };
 

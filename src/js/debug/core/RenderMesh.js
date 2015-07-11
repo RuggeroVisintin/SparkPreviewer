@@ -23,24 +23,33 @@
 console.log("RenderMesh.js included");
 
 function RenderMesh() {
-  var mVertexBufferHandle;  
-  var mVerticesSet;
+    var mVertexBufferHandle;  
+    var mVerticesSet;
+    var mIndicesSet;
 
-  this.setVerticesSet = function (verticesSet) {
-      mVerticesSet = verticesSet;
-  };
+    this.setVerticesSet = function (verticesSet) {
+        mVerticesSet = verticesSet;
+    };
 
-  this.setVertexBufferHandle = function (vertexBufferHandle) {
-      mVertexBufferHandle = vertexBufferHandle;
-  };
+    this.setVertexBufferHandle = function (vertexBufferHandle) {
+        mVertexBufferHandle = vertexBufferHandle;
+    };
 
-  this.getVerticesSet = function() { 
-   return mVerticesSet;
-  };
+    this.getVerticesSet = function() { 
+        return mVerticesSet;
+    };
 
-  this.getVertexBufferHandle = function() { 
-   return mVertexBufferHandle;
-  };
+    this.getVertexBufferHandle = function() { 
+        return mVertexBufferHandle;
+    };
 
-  return this;
+    this.setIndicesSet = function (indicesSet) {
+        mIndicesSet = indicesSet;
+    };
+
+    this.getIndicesSet = function() {
+        return mIndicesSet;
+    };
+
+    return this;
 }
