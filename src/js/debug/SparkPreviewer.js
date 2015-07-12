@@ -116,7 +116,7 @@ function Application(canvas) {
 	var running;
 
 	var phi = 90 * Math.PI / 180;
-	var theta = 0 * 180 / Math.PI;
+	var theta = 0 * Math.PI / 180;
 	var radius = 10;
 
 	var mouseDown = false;
@@ -137,9 +137,10 @@ function Application(canvas) {
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
         "precision highp float;" 								                     +
-        "varying vec3 outPos;" 									                     +
+        "varying vec3 outPos;" +
+        ""                                                       +
         "void main(void) {"                                 	                     +
-        "   gl_FragColor = vec4(1.0, outPos.x, outPos.y, 1);" 	                     +
+        "   gl_FragColor = vec4(1.0, 0.0, 0.0, 1);" 	                     +
         "}"                                                 	                     ;
 
     this.init = function () {
@@ -233,12 +234,6 @@ function Application(canvas) {
     -1.0, 1.0, 1.0,
     1.0,-1.0, 1.0
 	   ];
-
-	   var vertices = [
-        0.0, 1.0, 0.0,
-        -1.0, -1.0, 0.0,
-        1.0, -1.0, 0.0
-	   ];
 		
 		var renderMesh = new RenderMesh();
         var vbo = renderer.getGfx().createBuffer();
@@ -281,10 +276,12 @@ function Application(canvas) {
         var drawCall = new DrawCall();
         drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
         drawCall.shaderProgram = litShaderProgram;
-        drawCall.verticesNumber = 3;
+        drawCall.verticesNumber = 36;
 
 		drawCall.matrixMVP = mvp;
 		drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+        
+		drawCall.textureHandle = renderModel.getRenderMaterial(0).getDiffsueTextureHandle;
 
         renderer.render(0, drawCall);
 		
@@ -298,17 +295,13 @@ function Application(canvas) {
 	    Matrix4.perspective(45, mCanvas.clientWidth / mCanvas.clientHeight, 0.1, 100, mProjectionMatrix);
 	};
 
-	var handleMouseDown = function (e) {
+	var handleMouseDown = function () {
 	    mouseDown = true;
-
-	    var oldMouseX = e.clientX;
-	    var oldMouseY = e.clientY;
 	};
 
 	var handleMouseUp = function () {
 	    mouseDown = false;
 	};
-
 
 	var handleMouseMove = function (e) {
 	    if (mouseDown) {	        
