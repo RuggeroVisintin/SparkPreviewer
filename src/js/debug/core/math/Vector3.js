@@ -77,7 +77,7 @@ Vector3.subtract = function(a, b, out) {
 Vector3.multiply = function(a, b, out) {
 	out[0] = a[0] * b[0];
 	out[1] = a[1] * b[1];
-	out[2] = a[2] * b[2];ù
+	out[2] = a[2] * b[2];
 
 	return out;
 };

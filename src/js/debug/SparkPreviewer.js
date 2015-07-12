@@ -22,80 +22,16 @@
 
 console.log("SparkViewer.js included");
 
-{
-    var scriptEls = document.getElementsByTagName('script');
-    var thisScriptEl = scriptEls[scriptEls.length - 1];
-    var scriptPath = thisScriptEl.src;
-    var scriptFolder = scriptPath.substr(0, scriptPath.lastIndexOf('/') + 1);
+JRV.setBasePath("src/js/debug/");
 
-    console.log(scriptFolder);
 
-    var head = document.getElementsByTagName("head")[0];
-
-    var subFolders = "core/";
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "Renderer.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "math/Matrix4.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "RendererUtils.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "RenderMaterial.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "RenderMesh.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "RenderModel.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "RenderTypes.js";
-
-    head.appendChild(js);
-	
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "math/Vector2.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "math/Vector3.js";
-
-    head.appendChild(js);
-
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = scriptFolder + subFolders + "glMatrix.js";
-
-    head.appendChild(js);
-
-    window.onload = SparkPreviewerMain;
-}
+JRV.include("core/Renderer.js");
+JRV.include("core/math/Matrix4.js");
+JRV.include("core/RendererUtils.js");
+JRV.include("core/RenderMaterial.js");
+JRV.include("core/RenderMesh.js");
+JRV.include("core/RenderModel.js");
+JRV.include("core/math/Vector3.js");
 
 function Application(canvas) {
 	var mCanvas = canvas;
@@ -117,9 +53,15 @@ function Application(canvas) {
 
 	var phi = 90 * Math.PI / 180;
 	var theta = 0 * Math.PI / 180;
+
+	var camTargetX = 0;
+	var camTargetY = 0;
+
 	var radius = 10;
 
-	var mouseDown = false;
+	var leftMouseDown = false;
+	var rightMouseDown = false;
+	var wheelMouseDown = false;
 	var oldMouseX;
 	var oldMouseY;
 
@@ -137,7 +79,7 @@ function Application(canvas) {
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
         "precision highp float;" 								                     +
-       "varying vec3 outColor;"                                                       +
+       "varying vec3 outColor;"                                                      +
         ""                                                                           +
         "void main(void) {"                                 	                     +
         "   gl_FragColor = vec4(outColor, 1);" 	                                     +
@@ -159,6 +101,7 @@ function Application(canvas) {
         mCanvas.addEventListener('mousedown', handleMouseDown, false);
         mCanvas.addEventListener('mouseup', handleMouseUp, false);
         mCanvas.addEventListener('mousemove', handleMouseMove, false);
+        mCanvas.addEventListener('mousewheel', handleMouseWheel, false);
     };
 
     this.run = function () {
@@ -181,7 +124,7 @@ function Application(canvas) {
 	    eyeY = radius * Math.cos(phi);
 	    eyeZ = radius * Math.cos(theta) * Math.sin(phi);
 
-	    Matrix4.lookAt([eyeX, eyeY, eyeZ], [0, 0, 0], [0, 1, 0], mCameraView);
+	    Matrix4.lookAt([eyeX, eyeY, eyeZ], [camTargetX, camTargetY, 0], [0, 1, 0], mCameraView);
 	};
 
 	var initBackground = function() {
@@ -272,11 +215,11 @@ function Application(canvas) {
 
 	    var eyeX, eyeY, eyeZ;
 
-	    eyeX = radius * Math.sin(theta) * Math.sin(phi) + 0;
-	    eyeY = radius * Math.cos(phi);
+	    eyeX = radius * Math.sin(theta) * Math.sin(phi) + camTargetX;
+	    eyeY = radius * Math.cos(phi) + camTargetY;
 	    eyeZ = radius * Math.cos(theta) * Math.sin(phi) + 0;
 
-	    Matrix4.lookAt([eyeX, eyeY, eyeZ], [0, 0, 0], [0, 1, 0], mCameraView);
+	    Matrix4.lookAt([eyeX, eyeY, eyeZ], [camTargetX, 0, 0], [0, 1, 0], mCameraView);
 
 	    Matrix4.multiply(mProjectionMatrix, mCameraView, mvp);        
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
@@ -299,41 +242,74 @@ function Application(canvas) {
 	};
 
 	var onResizeEvent = function () {
-	    console.log("onResize");
+	    console.log("Resizing");
 	    Matrix4.perspective(45, mCanvas.clientWidth / mCanvas.clientHeight, 0.1, 100, mProjectionMatrix);
 	};
 
-	var handleMouseDown = function () {
-	    mouseDown = true;
+	var handleMouseDown = function (event) {
+	    switch(event.which) {
+            case 1:
+	            console.log("LeftMouseDown");
+	            leftMouseDown = true;
+	            break;
+	        case 2:
+	            console.log("MiddleMouseDown");
+	            wheelMouseDown = true;
+	            break;
+
+	    }
 	};
 
-	var handleMouseUp = function () {
-	    mouseDown = false;
+	var handleMouseUp = function (event) {
+	    switch (event.which) {
+	        case 1:
+	            console.log("RightMouseUp");
+	            leftMouseDown = false;
+	            break;
+	        case 2:
+	            console.log("MiddleMouseUp");
+	            wheelMouseDown = false;
+	            break;
+	    }
 	};
 
 	var handleMouseMove = function (e) {
-	    if (mouseDown) {	        
-	        
+	    if (leftMouseDown) {
+
 	        if ((oldMouseY - e.clientY) > 0) {
 	            if ((phi * 180 / Math.PI) < 170) {
-	                console.log("positive: " + (oldMouseY - e.clientY) + "angle: " + (phi * 180 / Math.PI));
 	                phi += (oldMouseY - e.clientY) * 0.01;	               	                
 	            }
 	        } else if((oldMouseY - e.clientY) < 0){ 
 	            if ((phi * 180 / Math.PI) > 10) {
-	                console.log("negative: " + (oldMouseY - e.clientY) + "angle: " + (phi * 180 / Math.PI));
-	                phi += (oldMouseY - e.clientY) * 0.01;
-	                
+	                phi += (oldMouseY - e.clientY) * 0.01;	                
 	            }
 	        }
 
 	        theta += (oldMouseX - e.clientX) * 0.01;
 	        console.log((oldMouseX - e.clientX) * 180 / Math.PI ) 
 
-        }
+	    }
 
 	    oldMouseX = e.clientX;
 	    oldMouseY = e.clientY;
+	};
+
+	var handleMouseWheel = function (e) {
+
+	    var deltaRadius = radius - (e.wheelDelta / 120);
+        
+	    if (deltaRadius > radius) {
+	        if (radius < 150) {
+	            radius += 0.5;
+	        }
+	    } else {
+	        if (radius > 0.5) {
+	            radius -= 0.5;
+	        }
+	    }
+
+	    return false;
 	};
 
     return this;
@@ -343,10 +319,14 @@ var APPLICATION;
 
 function SparkPreviewerMain() {
 
-    APPLICATION = new Application(document.getElementById("sparkViewer"));
-    APPLICATION.init();
-    APPLICATION.run();
+    window.onload = function () {
+
+        APPLICATION = new Application(document.getElementById("sparkViewer"));
+        APPLICATION.init();
+        APPLICATION.run();
+    }
 
     return 0;
 }
 
+SparkPreviewerMain();

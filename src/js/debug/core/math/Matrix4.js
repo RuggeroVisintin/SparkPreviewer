@@ -591,7 +591,7 @@ Matrix4.lookAt = function (eye, center, up, out) {
     if (Math.abs(eyex - centerx) < 0.000001 &&
         Math.abs(eyey - centery) < 0.000001 &&
         Math.abs(eyez - centerz) < 0.00001) {
-        return mat4.identity(out);
+        return Matrix4.identity(out);
     }
 
     z0 = eyex - centerx;

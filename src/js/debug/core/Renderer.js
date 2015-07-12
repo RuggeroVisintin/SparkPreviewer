@@ -53,7 +53,6 @@ function Renderer() {
         mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
         mGfx.enable(mGfx.DEPTH_TEST);
 
-
         mGfx.enableVertexAttribArray(positionsAttribLocation);
 	    //mGfx.enableVertexAttribArray(normalsAttrbLocation);
         //mGfx.enableVertexAttribArray(1);
