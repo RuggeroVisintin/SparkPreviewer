@@ -125,22 +125,22 @@ function Application(canvas) {
 
 	var LIT_VERTEX_SHADER_SOURCE =
         "attribute vec3 position;" 								                     +
-		//"attribute vec3 normal;" 								                     +
+		//"attribute vec3 color;" 								                     +
         //"attribute vec2 uv;" 									                     +
 		"uniform mat4 modelViewProjectionMatrix;" 				                     +
-       "varying vec3 outPos;"									                     +
+       "varying vec3 outColor;"									                     +
         "void main(void) {" 									                     +
-       "    outPos = position;"      								                     +
-		"   vec4 pos = modelViewProjectionMatrix * vec4(position, 1.0);"        +
+       "    outColor = position;"      								                 +
+		"   vec4 pos = modelViewProjectionMatrix * vec4(position, 1.0);"             +
         "   gl_Position = pos;"       	                                             +
         "}"                                                 	                     ;
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
         "precision highp float;" 								                     +
-        "varying vec3 outPos;" +
-        ""                                                       +
+       "varying vec3 outColor;"                                                       +
+        ""                                                                           +
         "void main(void) {"                                 	                     +
-        "   gl_FragColor = vec4(1.0, 0.0, 0.0, 1);" 	                     +
+        "   gl_FragColor = vec4(outColor, 1);" 	                                     +
         "}"                                                 	                     ;
 
     this.init = function () {
@@ -155,9 +155,7 @@ function Application(canvas) {
         renderer.program = litShaderProgram;		
         renderer.init();
 
-        // resize the viewport when the window is resized
         window.addEventListener('resize', onResizeEvent, false);
-
         mCanvas.addEventListener('mousedown', handleMouseDown, false);
         mCanvas.addEventListener('mouseup', handleMouseUp, false);
         mCanvas.addEventListener('mousemove', handleMouseMove, false);
@@ -197,42 +195,52 @@ function Application(canvas) {
 	var initDefaultModel = function() {
 
 	   var vertices = [
-    -1.0,-1.0,-1.0, // triangle 1 : begin
-    -1.0,-1.0, 1.0,
-    -1.0, 1.0, 1.0, // triangle 1 : end
-    1.0, 1.0,-1.0, // triangle 2 : begin
-    -1.0,-1.0,-1.0,
-    -1.0, 1.0,-1.0, // triangle 2 : end
-    1.0,-1.0, 1.0,
-    -1.0,-1.0,-1.0,
-    1.0,-1.0,-1.0,
-    1.0, 1.0,-1.0,
-    1.0,-1.0,-1.0,
-    -1.0,-1.0,-1.0,
-    -1.0,-1.0,-1.0,
-    -1.0, 1.0, 1.0,
-    -1.0, 1.0,-1.0,
-    1.0,-1.0, 1.0,
-    -1.0,-1.0, 1.0,
-    -1.0,-1.0,-1.0,
-    -1.0, 1.0, 1.0,
-    -1.0,-1.0, 1.0,
-    1.0,-1.0, 1.0,
-    1.0, 1.0, 1.0,
-    1.0,-1.0,-1.0,
-    1.0, 1.0,-1.0,
-    1.0,-1.0,-1.0,
-    1.0, 1.0, 1.0,
-    1.0,-1.0, 1.0,
-    1.0, 1.0, 1.0,
-    1.0, 1.0,-1.0,
-    -1.0, 1.0,-1.0,
-    1.0, 1.0, 1.0,
-    -1.0, 1.0,-1.0,
-    -1.0, 1.0, 1.0,
-    1.0, 1.0, 1.0,
-    -1.0, 1.0, 1.0,
-    1.0,-1.0, 1.0
+		-1.0, -1.0, -1.0, // 0
+		 1.0, 1.0, -1.0, // 2
+		 1.0, -1.0, -1.0, // 1
+		-1.0, -1.0, -1.0, // 0
+		-1.0, 1.0, -1.0, // 3
+		 1.0, 1.0, -1.0, // 2
+
+		// Y-
+		-1.0, -1.0, -1.0, // 0
+		 1.0, -1.0, -1.0, // 1
+		 1.0, -1.0, 1.0, // 5
+		-1.0, -1.0, -1.0, // 0
+		 1.0, -1.0, 1.0, // 5
+		-1.0, -1.0, 1.0, // 4
+
+		// X+
+		 1.0, -1.0, -1.0, // 1
+		 1.0, 1.0, -1.0, // 2
+		 1.0, 1.0, 1.0, // 6
+		 1.0, -1.0, -1.0, // 1
+		 1.0, 1.0, 1.0, // 6
+		 1.0, -1.0, 1.0, // 5
+
+		// Y+
+		 1.0, 1.0, -1.0, // 2
+		-1.0, 1.0, 1.0, // 7
+		 1.0, 1.0, 1.0, // 6
+		 1.0, 1.0, -1.0, // 2
+		-1.0, 1.0, -1.0, // 3
+		-1.0, 1.0, 1.0, // 7
+
+		// X-
+		-1.0, 1.0, -1.0, // 3
+		-1.0, -1.0, 1.0, // 4
+		-1.0, 1.0, 1.0, // 7
+		-1.0, 1.0, -1.0, // 3
+		-1.0, -1.0, -1.0, // 0
+		-1.0, -1.0, 1.0, // 4
+
+		// Z+		 
+		-1.0, -1.0, 1.0, // 4
+		 1.0, -1.0, 1.0, // 5
+		 1.0, 1.0, 1.0, // 6
+		-1.0, -1.0, 1.0, // 4
+		 1.0, 1.0, 1.0, // 6
+		-1.0, 1.0, 1.0, // 7
 	   ];
 		
 		var renderMesh = new RenderMesh();

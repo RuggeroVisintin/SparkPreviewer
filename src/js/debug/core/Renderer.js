@@ -49,10 +49,13 @@ function Renderer() {
     };
    
     this.init = function () {
-        mGfx.clearColor(0.0, 0.0, 0.0, 1.0);      
+        mGfx.clear(mGfx.COLOR_BUFFER_BIT);
+        mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
+        mGfx.enable(mGfx.DEPTH_TEST);
+
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);
-	   // mGfx.enableVertexAttribArray(normalsAttrbLocation);
+	    //mGfx.enableVertexAttribArray(normalsAttrbLocation);
         //mGfx.enableVertexAttribArray(1);
 
         console.log(positionsAttribLocation);
@@ -66,15 +69,13 @@ function Renderer() {
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
 
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 3, 0);
-		//mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 0, 0);
+        //mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 6, 4 * 3);
 		//mGfx.vertexAttribPointer(uvsAttribLocation, 2, mGfx.FLOAT, false, 4 * 4, 2 * 4);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
         mGfx.drawArrays(mGfx.TRIANGLES, 0, drawCall.verticesNumber);
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, null);
-
-        mGfx.flush();
     };
 
     // initialization 
