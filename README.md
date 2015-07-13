@@ -15,7 +15,9 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 ============================================================================= 
 
 <xmp>
-        // replace the path with a correct one
+        // replace the path with a correct one <br/>
+</xmp>
+<xmp>
         <script src= "path/to/SparkPreviewer.js"></script>
 </xmp>
 <br/>
