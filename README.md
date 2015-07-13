@@ -14,10 +14,12 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 
 ============================================================================= 
 
-<script src= "path/to/SparkPreviewer.js"></script>  <!-- REPLACE THE SRC PATH the script will do the rest -->
-<canvas id = "sparkViewer" width = "800" height = "600">
-        You have to update your broswer to use the SparkViewer viewer
-</canvas>
+<xmp>
+        <script src= "path/to/SparkPreviewer.js"></script>  <!-- REPLACE THE SRC PATH the script will do the rest -->
+        <canvas id = "sparkViewer" width = "800" height = "600">
+                You have to update your broswer to use the SparkViewer viewer
+        </canvas>
+</xmp>
 
  =============================================================================
         
@@ -26,13 +28,14 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 ============================================================================= 
 
 <!-- the following lines are optional and usefull only if you want the previewer to activate on a mouseClick-->
-<style>
-    #sparkViewer {
-        background-image: url(location/To/Image/You/Want/To/Use/As/Background);   /* replace this string */
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-</style>
-
+<xmp>
+        <style>
+                #sparkViewer {
+                        background-image: url(location/To/Image/You/Want/To/Use/As/Background);   /* replace this string */
+                        background-position: center;
+                        background-repeat: no-repeat;
+                }
+        </style>
+</xmp>
 
  =============================================================================
