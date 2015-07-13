@@ -15,8 +15,9 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 ============================================================================= 
 
 <xmp>
-        // replace the path with a correct one <br/>
+        // replace the path with a correct one
 </xmp>
+<br/>
 <xmp>
         <script src= "path/to/SparkPreviewer.js"></script>
 </xmp>
@@ -42,11 +43,29 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 <!-- the following lines are optional and usefull only if you want the previewer to activate on a mouseClick-->
 <xmp>
         <style>
+</xmp>
+<br />
+<xmp>
                 #sparkViewer {
+</xmp>
+<br />
+<xmp>
                         background-image: url(location/To/Image/You/Want/To/Use/As/Background);   /* replace this string */
+</xmp>
+<br />
+<xmp>
                         background-position: center;
+</xmp>
+<br />
+<xmp>
                         background-repeat: no-repeat;
+</xmp>
+<br />
+<xmp>
                 }
+</xmp>
+<br />
+<xmp>
         </style>
 </xmp>
 
