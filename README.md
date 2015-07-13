@@ -13,13 +13,12 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 3. you have to copy and paste the following lines of HTML code where you want the previewer to appear and also replace the "src" string to match your "SparkPreviewer.js" file location:
 
 ============================================================================= 
-"""
-        <!--replace the path with a correct one-->
-        <script src= "path/to/SparkPreviewer.js"></script>
-        <canvas id = "sparkViewer" width = "800" height = "600">
-                You have to update your broswer to use the SparkViewer viewer
-        </canvas>
-"""
+
+>       <!--replace the path with a correct one-->
+>       <script src= "path/to/SparkPreviewer.js"></script>
+>      <canvas id = "sparkViewer" width = "800" height = "600">
+>               You have to update your broswer to use the SparkViewer viewer
+>        </canvas>
  =============================================================================
         
 4. additionally if you want to use the default style of the editor you also have to add the following lines of code:
