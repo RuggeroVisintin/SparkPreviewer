@@ -29,9 +29,10 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 <!-- the following lines are optional and usefull only if you want the previewer to activate on a mouseClick-->
         <style>
                 #sparkViewer {
-                        background-image: url(location/To/Image/You/Want/To/Use/As/Background);   /* replace this string */
-                        background-position: center;
-                        background-repeat: no-repeat;
+                     /* replace the path with a correct one */
+                     background-image: url(location/To/Image/You/Want/To/Use/As/Background); 
+                     background-position: center;
+                     background-repeat: no-repeat;
                 }
         </style>
 ```
