@@ -6,9 +6,9 @@ http://www.quartaibvisintin.altervista.org/Canvas%20Examples/webgl_previewer/ind
 
 To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 
-1. You MUST have "SparkViewer.js" file and "SparkViewer" folder in the same location of the filesystem otherwhise the previewer is not going to work.
+1. You MUST have "SparkPreviewer.js" file and "core" folder in the same location of the filesystem otherwhise the previewer is not going to work.
 
-2. do NOT DELETE the "SparkViewer.js" file NOR the "SparkViewer" folder otherwhise the previewer is not going to work.
+2. do NOT DELETE the "SparkPreviewer.js" file NOR the "core" folder otherwhise the previewer is not going to work.
 
 3. you have to copy and paste the following lines of HTML code where you want the previewer to appear and also replace the "src" string to match your "SparkPreviewer.js" file location:
 
@@ -25,6 +25,7 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 
 ============================================================================= 
 
+<!-- the following lines are optional and usefull only if you want the previewer to activate on a mouseClick-->
 <style>
     #sparkViewer {
         background-image: url(location/To/Image/You/Want/To/Use/As/Background);   /* replace this string */
