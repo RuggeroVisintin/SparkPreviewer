@@ -16,8 +16,17 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 
 <xmp>
         <script src= "path/to/SparkPreviewer.js"></script> <!-- REPLACE THE SRC PATH the script will do the rest -->
-        <canvas id = "sparkViewer" width = "800" height = "600"><p>
+</xmp>
+<br/>
+<xmp>
+        <canvas id = "sparkViewer" width = "800" height = "600">
+</xmp>
+<br/>
+<xmp>
                 You have to update your broswer to use the SparkViewer viewer
+</xmp>
+<br/>
+<xmp>
         </canvas>
 </xmp>
 
