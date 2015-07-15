@@ -56,7 +56,10 @@ function ArcballCamera() {
         }
     };
 
-    this.moveRadius = function(deltaRadius) {
+    this.moveRadius = function (delta) {
+        var deltaRadius = mRadius - delta;
+        console.log("deltaRadius: " + deltaRadius);
+
         if (deltaRadius > mRadius) {
             if (mRadius < 150) {
                 mRadius += 0.5;

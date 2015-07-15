@@ -257,13 +257,8 @@ function Application(canvas) {
 
 	    }
 
-	    if (inputManager.getWheelDelta() != 0) {
-	        
-	        var deltaRadius = radius - (inputManager.getWheelDelta() / 120);
-
-	        console.log(deltaRadius);
-
-	        mArcballCamera.moveRadius(deltaRadius);
+	    if (inputManager.getWheelDelta() != 0) {	        
+	        mArcballCamera.moveRadius(inputManager.getWheelDelta() / 120);
 
 	    }
 
