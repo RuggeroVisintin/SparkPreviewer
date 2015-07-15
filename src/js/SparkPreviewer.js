@@ -31,8 +31,15 @@ JRV.include("core/RenderMaterial.js");
 JRV.include("core/RenderMesh.js");
 JRV.include("core/RenderModel.js");
 JRV.include("core/math/Vector3.js");
-JRV.include("core/input/PcInputManager.js");
+
+if (JRV.isMobile.any()) {
+    JRV.include("core/input/MobileInputManager.js");
+} else {
+    JRV.include("core/input/PcInputManager.js");
+}
+
 JRV.include("core/Camera.js");
+JRV.include("core/utils/ShapeGenerator.js");
 
 function Application(canvas) {
 	var mCanvas = canvas;
@@ -47,21 +54,10 @@ function Application(canvas) {
     var diffuseShaderProgram;
     var fullShaderProgram;
 	
-	var mProjectionMatrix;
 	var mModelViewMatrix;
-	var mCameraView;
-	
-	var running;
-
 	var mArcballCamera;
 
-	var phi = 90 * Math.PI / 180;
-	var theta = 0 * Math.PI / 180;
-
-	var camTargetX = 0;
-	var camTargetY = 0;
-
-	var radius = 10;
+	var running;	
 
     var LIT_VERTEX_SHADER_SOURCE =
         "attribute vec3 position;" 								                     +
@@ -84,6 +80,8 @@ function Application(canvas) {
         "}"                                                 	                     ;
 
     this.init = function () {
+        console.log("mobile: " + JRV.isMobile.any());
+
         renderer = new Renderer();
         renderer.initWebGL(mCanvas);
         
@@ -99,7 +97,11 @@ function Application(canvas) {
         renderer.init();
 
         window.addEventListener('resize', onResizeEvent, false);
-        inputManager = new PcInputManager(mCanvas);
+        if (JRV.isMobile.any()) {
+            inputManager = new MobileInputManager(mCanvas);
+        } else {
+            inputManager = new PcInputManager(mCanvas);
+        }
 
     };
 
@@ -114,16 +116,6 @@ function Application(canvas) {
 	
 	var initMatrices = function () {
 	    mModelViewMatrix = Matrix4.create();
-	    mProjectionMatrix = Matrix4.create();
-	    mCameraView = Matrix4.create();
-		
-	    Matrix4.perspective(45, mCanvas.clientWidth / mCanvas.clientHeight, 0.1, 100, mProjectionMatrix);
-
-	    eyeX = radius * Math.sin(theta) * Math.sin(phi);
-	    eyeY = radius * Math.cos(phi);
-	    eyeZ = radius * Math.cos(theta) * Math.sin(phi);
-
-	    Matrix4.lookAt([eyeX, eyeY, eyeZ], [camTargetX, camTargetY, 0], [0, 1, 0], mCameraView);
 	};
 
 	var initBackground = function() {
@@ -136,54 +128,7 @@ function Application(canvas) {
 	
 	var initDefaultModel = function() {
 
-	   var vertices = [
-		-1.0, -1.0, -1.0, // 0
-		 1.0, 1.0, -1.0, // 2
-		 1.0, -1.0, -1.0, // 1
-		-1.0, -1.0, -1.0, // 0
-		-1.0, 1.0, -1.0, // 3
-		 1.0, 1.0, -1.0, // 2
-
-		// Y-
-		-1.0, -1.0, -1.0, // 0
-		 1.0, -1.0, -1.0, // 1
-		 1.0, -1.0, 1.0, // 5
-		-1.0, -1.0, -1.0, // 0
-		 1.0, -1.0, 1.0, // 5
-		-1.0, -1.0, 1.0, // 4
-
-		// X+
-		 1.0, -1.0, -1.0, // 1
-		 1.0, 1.0, -1.0, // 2
-		 1.0, 1.0, 1.0, // 6
-		 1.0, -1.0, -1.0, // 1
-		 1.0, 1.0, 1.0, // 6
-		 1.0, -1.0, 1.0, // 5
-
-		// Y+
-		 1.0, 1.0, -1.0, // 2
-		-1.0, 1.0, 1.0, // 7
-		 1.0, 1.0, 1.0, // 6
-		 1.0, 1.0, -1.0, // 2
-		-1.0, 1.0, -1.0, // 3
-		-1.0, 1.0, 1.0, // 7
-
-		// X-
-		-1.0, 1.0, -1.0, // 3
-		-1.0, -1.0, 1.0, // 4
-		-1.0, 1.0, 1.0, // 7
-		-1.0, 1.0, -1.0, // 3
-		-1.0, -1.0, -1.0, // 0
-		-1.0, -1.0, 1.0, // 4
-
-		// Z+		 
-		-1.0, -1.0, 1.0, // 4
-		 1.0, -1.0, 1.0, // 5
-		 1.0, 1.0, 1.0, // 6
-		-1.0, -1.0, 1.0, // 4
-		 1.0, 1.0, 1.0, // 6
-		-1.0, 1.0, 1.0, // 7
-	   ];
+	    var vertices = ShapeGenerator.createCube();
 		
 		var renderMesh = new RenderMesh();
         var vbo = renderer.getGfx().createBuffer();
@@ -206,8 +151,6 @@ function Application(canvas) {
         renderModel.addRenderMaterial(renderMaterial);			
 	};
 	
-	var rotation = 1;
-
 	var runLoop = function () {
 	    updateInput();
 	    updateRendering();
@@ -248,18 +191,15 @@ function Application(canvas) {
 	    inputManager.update();
 
 	    if (inputManager.isLeftMouseDown()) {
-	        var verticalDelta = inputManager.getMouseVerticalDelta()
+	        var verticalDelta = inputManager.getMouseVerticalDelta();
+	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
 
-	        console.log(verticalDelta);
-
-	        mArcballCamera.rotateY(verticalDelta);
-	        mArcballCamera.rotateX(inputManager.getMouseHorizontalDelta())
-
+            mArcballCamera.rotateY(verticalDelta);
+            mArcballCamera.rotateX(horizontalDelta);
 	    }
 
 	    if (inputManager.getWheelDelta() != 0) {	        
 	        mArcballCamera.moveRadius(inputManager.getWheelDelta() / 120);
-
 	    }
 
 	    inputManager.postUpdate();

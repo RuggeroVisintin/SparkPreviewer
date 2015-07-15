@@ -50,3 +50,29 @@ JRV.include = function (path) {
 
     this.includedLibs.push(this.basePath + path);
 };
+
+JRV.isMobile = {
+    Android: function () {
+        return (navigator.userAgent.match(/Android/i) != null);
+    },
+
+    BlackBerry: function () {
+        return (navigator.userAgent.match(/BlackBerry/i) != null);
+    },
+
+    iOS: function () {
+        return (navigator.userAgent.match(/iPhone|iPad|iPod/i) != null);
+    },
+
+    Opera: function () {
+        return (navigator.userAgent.match(/Opera Mini/i) != null);
+    },
+
+    Windows: function () {
+        return (navigator.userAgent.match(/IEMobile/i) != null);
+    },
+
+    any: function () {
+        return (JRV.isMobile.Android() || JRV.isMobile.BlackBerry() || JRV.isMobile.iOS() || JRV.isMobile.Opera() || JRV.isMobile.Windows());
+    }
+};
