@@ -41,9 +41,12 @@ if (JRV.isMobile.any()) {
 JRV.include("core/Camera.js");
 JRV.include("core/utils/ShapeGenerator.js");
 
-function Application(canvas) {
+function Application(canvas, debugCanvas) {
 	var mCanvas = canvas;
 	var renderer;
+
+	var debugRenderer;
+
 	var inputManager;
 
     var backgroundColor;
@@ -73,7 +76,7 @@ function Application(canvas) {
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
         "precision mediump float;" 								                     +
-       "varying vec3 outColor;"                                                      +
+        "varying vec3 outColor;"                                                     +
         ""                                                                           +
         "void main(void) {"                                 	                     +
         "   gl_FragColor = vec4(outColor, 1);" 	                                     +
@@ -84,6 +87,12 @@ function Application(canvas) {
 
         renderer = new Renderer();
         renderer.initWebGL(mCanvas);
+
+        debugRenderer = debugCanvas.getContext("2d");
+
+
+        debugRenderer.fillStyle = "white";
+        debugRenderer.font = "11px Lucida Console";
         
                 
         mArcballCamera = new ArcballCamera();
@@ -121,7 +130,7 @@ function Application(canvas) {
 	};
 
 	var initBackground = function() {
-		backgroundColor = Vector3.create(0.0, 0.0, 0.0);
+		backgroundColor = Vector3.create(1.0, 1.0, 1.0);
 	};
 	
 	var initShaderPrograms = function () {
@@ -129,7 +138,6 @@ function Application(canvas) {
 	};
 	
 	var initDefaultModel = function() {
-
 	    var vertices = ShapeGenerator.createCube();
 		
 		var renderMesh = new RenderMesh();
@@ -153,13 +161,25 @@ function Application(canvas) {
         renderModel.addRenderMaterial(renderMaterial);			
 	};
 	
+	lastLoop = new Date();
+
 	var runLoop = function () {
+	    var thisLoop = new Date;
+	    var fps = 1000 / (thisLoop - lastLoop);
+
 	    updateInput();
 	    updateRendering();
+
+	    debugRenderer.clearRect(0, 0, 300, 40);
+	    debugRenderer.fillText("Fps: " + fps, 10, 10);
 		
-		if(running) {
+	    if (running) {
 			window.requestAnimationFrame(runLoop);
+		} else {
+		    return;
 		}
+
+		lastLoop = thisLoop;
 	};
 
 	var onResizeEvent = function () {
@@ -177,7 +197,7 @@ function Application(canvas) {
 	    var camMatrices = mArcballCamera.updateMatrices();
 
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
-	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
+	    //Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
 	    var drawCall = new DrawCall();
 	    drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
@@ -190,6 +210,7 @@ function Application(canvas) {
 	    drawCall.textureHandle = renderModel.getRenderMaterial(0).getDiffsueTextureHandle;
 
 	    renderer.render(0, drawCall);
+
 	}
 
 	var updateInput = function()
@@ -219,8 +240,17 @@ var APPLICATION;
 function SparkPreviewerMain() {
 
     window.onload = function () {
+        var debugCanvas = document.getElementById("sparkViewer").cloneNode();
+        debugCanvas.id = "sparkDebugger";
+        debugCanvas.style.zIndex = "100";
+        debugCanvas.style.position = "absolute";
+        debugCanvas.style.left = "0";
+        debugCanvas.style.top = "0";
+        debugCanvas.style.pointerEvents = "none";
 
-        APPLICATION = new Application(document.getElementById("sparkViewer"));
+        document.body.appendChild(debugCanvas);
+
+        APPLICATION = new Application(document.getElementById("sparkViewer"), debugCanvas);
         APPLICATION.init();
         APPLICATION.run();
     }
