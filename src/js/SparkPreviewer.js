@@ -72,7 +72,7 @@ function Application(canvas) {
         "}"                                                 	                     ;
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
-        "precision highp float;" 								                     +
+        "precision mediump float;" 								                     +
        "varying vec3 outColor;"                                                      +
         ""                                                                           +
         "void main(void) {"                                 	                     +
