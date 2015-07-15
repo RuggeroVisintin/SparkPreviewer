@@ -44,7 +44,7 @@ function MobileInputManager(target) {
         target.addEventListener('touchstart', handleMouseDown, false);
         target.addEventListener('touchend', handleMouseUp, false);
         target.addEventListener('touchmove', handleMouseMove, false);
-        target.addEventListener('mousewheel', handleWheelDelta, false);
+        target.addEventListener('gesturechange', handleWheelDelta, false);
     };
 
     this.postUpdate = function () {
@@ -83,55 +83,35 @@ function MobileInputManager(target) {
 
     var handleMouseDown = function (event) {
 
-        console.log("touchDown");
-        mLeftMouseDown = true;
-
-        mMouseX = event.touches[0].pageX;
-        mMouseY = event.touches[0].pageY;
-
-        /*switch (event.which) {
+        switch (event.touches.length) {
             case 1:
-                console.log("LeftMouseDown");
+                console.log("singleTouchDown");
                 mLeftMouseDown = true;
                 break;
             case 2:
-                console.log("MiddleMouseDown");
-                mWheelMouseDown = true;
-                break;
-
-            case 3:
-                console.log("RightMouseDown");
+                console.log("doubleTouchDown");
                 mRightMouseDown = true;
-                break;
+        }
 
-        }*/
+        mMouseX = event.touches[0].pageX;
+        mMouseY = event.touches[0].pageY;
     };
 
     var handleMouseUp = function (event) {
-        console.log("touchUp");
-        mLeftMouseDown = false;
-
-        /*switch (event.which) {
+        switch (event.touches.length) {
             case 1:
-                console.log("LeftMouseUp");
+                console.log("singleTouchUp");
                 mLeftMouseDown = false;
                 break;
             case 2:
-                console.log("MiddleMouseUp");
-                mWheelMouseDown = false;
-                break;
-
-            case 3:
-                console.log("RightMouseUp");
+                console.log("doubleTouchUp");
                 mRightMouseDown = false;
-                break;
-
-        }*/
+        }
     };
 
     var handleMouseMove = function (event) {
-        mMouseHorizontalDelta = mMouseX - event.touches[0].pageX;
-        mMouseVerticalDelta = mMouseY - event.touches[0].pageY;
+        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
 
         console.log("mouse is moving: " + mMouseHorizontalDelta);
 

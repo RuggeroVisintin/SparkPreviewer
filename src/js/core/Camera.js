@@ -80,5 +80,9 @@ function ArcballCamera() {
 
         return [mProjectionMatrix, mViewMatrix];
     };
+
+    this.setViewport = function (fov, ratio) {
+        Matrix4.perspective(fov, ratio, 0.1, 100, mProjectionMatrix);
+    };
 };
 

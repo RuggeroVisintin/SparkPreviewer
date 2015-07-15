@@ -87,6 +87,8 @@ function Application(canvas) {
         
                 
         mArcballCamera = new ArcballCamera();
+        mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
+
 
         initBackground();
         initShaderPrograms();
@@ -162,8 +164,12 @@ function Application(canvas) {
 
 	var onResizeEvent = function () {
 	    console.log("Resizing");
-	    //Matrix4.perspective(45, mCanvas.clientWidth / mCanvas.clientHeight, 0.1, 100, mProjectionMatrix);
-	};
+
+	    mCanvas.style.width = document.body.clientWidth;
+	    mCanvas.style.height = document.body.clientHeight;
+
+	    mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
+   	};
 
 	var updateRendering = function() 
 	{
