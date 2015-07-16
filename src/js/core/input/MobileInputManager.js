@@ -82,6 +82,7 @@ function MobileInputManager(target) {
     };
 
     var handleMouseDown = function (event) {
+        e.preventDefault();
 
         switch (event.touches.length) {
             case 1:
@@ -98,6 +99,8 @@ function MobileInputManager(target) {
     };
 
     var handleMouseUp = function (event) {
+        e.preventDefault();
+
         switch (event.touches.length) {
             case 1:
                 console.log("singleTouchUp");
@@ -117,6 +120,8 @@ function MobileInputManager(target) {
 
         mMouseX = event.touches[0].pageX;
         mMouseY = event.touches[0].pageY;
+
+        e.preventDefault();
     };
 
     var handleWheelDelta = function (event) {

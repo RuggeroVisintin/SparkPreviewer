@@ -174,7 +174,7 @@ function Application(canvas, debugCanvas) {
 	    updateInput();
 	    updateRendering();
 
-        debugRenderer.clearRect(0, 0, 300, 40);
+        debugRenderer.clearRect(0, 0, 300, 50);
         debugRenderer.fillText("Fps: " + mFps, 10, 10);
         debugRenderer.fillText("Frame Time: " + mFrameTime, 10, 30);
 	
@@ -246,6 +246,7 @@ function SparkPreviewerMain() {
 
     window.onload = function () {
         var debugCanvas = document.getElementById("sparkViewer").cloneNode();
+
         debugCanvas.id = "sparkDebugger";
         debugCanvas.style.zIndex = "100";
         debugCanvas.style.position = "absolute";

@@ -77,7 +77,6 @@ function PcInputManager(target) {
     };
 
     var handleMouseDown = function (event) {
-
         switch (event.which) {
             case 1:
                 console.log("LeftMouseDown");
@@ -94,9 +93,13 @@ function PcInputManager(target) {
                 break;
 
         }
+
+        e.preventDefault();
+
     };
 
     var handleMouseUp = function (event) {
+
         switch (event.which) {
             case 1:
                 console.log("LeftMouseUp");
@@ -113,6 +116,9 @@ function PcInputManager(target) {
                 break;
 
         }
+
+        e.preventDefault();
+
     };
 
     var handleMouseMove = function (event) {
@@ -128,6 +134,8 @@ function PcInputManager(target) {
     var handleWheelDelta = function (event) {
         mWheelDelta = event.wheelDelta;
         console.log("wheelIsMoving: " + mWheelDelta);
+
+        return false;
     };
 
     return this;
