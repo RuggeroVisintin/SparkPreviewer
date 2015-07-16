@@ -34,19 +34,26 @@ JRV.setBasePath = function (basePath) {
 };
 
 JRV.include = function (path) {
-   for (var i = 0; i < this.includedLibs.length; i++) {
+    for (var i = 0; i < this.includedLibs.length; i++) {
         if (this.basePath + path === this.includedLibs[i]) {
             return;
         }
-    }
+   }
 
-    var js = document.createElement("script");
-    js.type = "text/javascript";
-    js.src = this.basePath + path;
+   var included = false;
 
-    document.getElementsByTagName("head")[0].appendChild(js);
+   var js = document.createElement("script");
+   js.type = "text/javascript";
 
-    this.includedLibs.push(this.basePath + path);
+   js.onload = function () {
+       included = true;
+       console.log("included");
+       return;
+   };
+
+   js.src = this.basePath + path;
+   document.getElementsByTagName("head")[0].appendChild(js);
+   this.includedLibs.push(this.basePath + path);
 };
 
 JRV.isMobile = {
@@ -93,3 +100,14 @@ JRV.supportTouch = function () {
 JRV.supportMouse = function () {    
     return 'onmousedown' in window;
 };
+
+JRV.waitUntil = function (condition, value, callback) {
+    var interval = setInterval(
+        function () {
+            if (condition == value) {
+                clearInterval(interval);
+                callback();
+                return;
+            }
+        }, 1);
+}
