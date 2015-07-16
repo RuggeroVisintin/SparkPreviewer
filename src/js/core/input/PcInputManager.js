@@ -40,6 +40,7 @@ function PcInputManager(target) {
         target.addEventListener('mouseup', handleMouseUp, false);
         target.addEventListener('mousemove', handleMouseMove, false);
         target.addEventListener('mousewheel', handleWheelDelta, false);
+        target.oncontextmenu = function (e) { e.preventDefault(); };
     };
 
     this.postUpdate = function () {
@@ -95,7 +96,7 @@ function PcInputManager(target) {
         }
 
         event.preventDefault();
-
+        return false;
     };
 
     var handleMouseUp = function (event) {
@@ -118,7 +119,7 @@ function PcInputManager(target) {
         }
 
         event.preventDefault();
-
+        return false;
     };
 
     var handleMouseMove = function (event) {

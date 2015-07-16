@@ -86,6 +86,7 @@ function MobileInputManager(target) {
             case 1:
                 console.log("singleTouchDown");
                 mLeftMouseDown = true;
+                event.preventDefault();
                 break;
             case 2:
                 console.log("doubleTouchDown");
@@ -95,7 +96,6 @@ function MobileInputManager(target) {
         mMouseX = event.touches[0].pageX;
         mMouseY = event.touches[0].pageY;
 
-        event.preventDefault();
     };
 
     var handleMouseUp = function (event) {
@@ -109,7 +109,6 @@ function MobileInputManager(target) {
                 mRightMouseDown = false;
         }
 
-        event.preventDefault();
 
     };
 
@@ -126,8 +125,11 @@ function MobileInputManager(target) {
     };
 
     var handleWheelDelta = function (event) {
-        mWheelDelta = event.wheelDelta;
-        console.log("wheelIsMoving: " + mWheelDelta);
+        if (event.scale < 1.0) {
+            mWheelDelta = 1.0 - event.scale;
+        } else if (event.scale > 1.0) {
+            mWheelDelta = 1.0 + event.scale;
+        }
         event.preventDefault();
     };
 
