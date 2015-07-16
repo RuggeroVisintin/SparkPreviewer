@@ -61,6 +61,8 @@ function Application(canvas, debugCanvas) {
 	var mArcballCamera;
 
 	var running;	
+	var mFps;
+	var mFrameTime;
 
     var LIT_VERTEX_SHADER_SOURCE =
         "attribute vec3 position;" 								                     +
@@ -165,14 +167,17 @@ function Application(canvas, debugCanvas) {
 
 	var runLoop = function () {
 	    var thisLoop = new Date;
-	    var fps = 1000 / (thisLoop - lastLoop);
+
+	    mFrameTime = thisLoop - lastLoop;
+	    mFps = Math.round(1000 / mFrameTime);
 
 	    updateInput();
 	    updateRendering();
 
-	    debugRenderer.clearRect(0, 0, 300, 40);
-	    debugRenderer.fillText("Fps: " + fps, 10, 10);
-		
+        debugRenderer.clearRect(0, 0, 300, 40);
+        debugRenderer.fillText("Fps: " + mFps, 10, 10);
+        debugRenderer.fillText("Frame Time: " + mFrameTime, 10, 30);
+	
 	    if (running) {
 			window.requestAnimationFrame(runLoop);
 		} else {

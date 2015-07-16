@@ -46,14 +46,16 @@ function ArcballCamera() {
     // i'll keep it locked till i'll solve matrices multiplication error
     this.rotateY = function (deltaRads) {
         if (deltaRads > 0) {
-            if ((mPhi * 180 / Math.PI) < 170) {
-                mPhi += deltaRads * 0.02;
+            if (((mPhi + (deltaRads * 0.02)) * 180 / Math.PI) < 170) {
+                mPhi += (deltaRads * 0.02);
             }
         } else if (deltaRads < 0) {
-            if ((mPhi * 180 / Math.PI) > 10) {
-                mPhi += deltaRads * 0.02;
+            if (((mPhi + (deltaRads * 0.02)) * 180 / Math.PI) > 10) {
+                mPhi += (deltaRads * 0.02);
             }
         }
+
+        console.log("deltaRads: " + deltaRads * 0.02);
     };
 
     this.moveRadius = function (delta) {
