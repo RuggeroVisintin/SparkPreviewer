@@ -189,10 +189,6 @@ function Application(canvas, debugCanvas) {
 
 	var onResizeEvent = function () {
 	    console.log("Resizing");
-
-	    mCanvas.style.width = document.body.clientWidth;
-	    mCanvas.style.height = document.body.clientHeight;
-
 	    mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
    	};
 

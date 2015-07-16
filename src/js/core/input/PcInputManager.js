@@ -94,7 +94,7 @@ function PcInputManager(target) {
 
         }
 
-        e.preventDefault();
+        event.preventDefault();
 
     };
 
@@ -117,7 +117,7 @@ function PcInputManager(target) {
 
         }
 
-        e.preventDefault();
+        event.preventDefault();
 
     };
 
@@ -135,7 +135,7 @@ function PcInputManager(target) {
         mWheelDelta = event.wheelDelta;
         console.log("wheelIsMoving: " + mWheelDelta);
 
-        return false;
+        event.preventDefault();
     };
 
     return this;
