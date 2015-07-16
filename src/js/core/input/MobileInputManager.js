@@ -38,7 +38,7 @@ function MobileInputManager(target) {
 
     var mWheelDelta;
     var mMouseHorizontalDelta = 0;
-    var mMouseVerticalDelta   = 0;
+    var mMouseVerticalDelta = 0;
 
     this.update = function () {
         target.addEventListener('touchstart', handleMouseDown, false);
@@ -86,16 +86,17 @@ function MobileInputManager(target) {
             case 1:
                 console.log("singleTouchDown");
                 mLeftMouseDown = true;
-                event.preventDefault();
                 break;
             case 2:
                 console.log("doubleTouchDown");
                 mRightMouseDown = true;
+                
         }
 
         mMouseX = event.touches[0].pageX;
         mMouseY = event.touches[0].pageY;
 
+        event.preventDefault();
     };
 
     var handleMouseUp = function (event) {
@@ -113,8 +114,12 @@ function MobileInputManager(target) {
     };
 
     var handleMouseMove = function (event) {
-        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
-        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
+        if (mLeftMouseDown) {
+            mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
+            mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
+        } else if (mRightMouseDown) {
+            // do nothing
+        }
 
         console.log("mouse is moving: " + mMouseHorizontalDelta);
 
@@ -125,12 +130,7 @@ function MobileInputManager(target) {
     };
 
     var handleWheelDelta = function (event) {
-        if (event.scale < 1.0) {
-            mWheelDelta = 1.0 - event.scale;
-        } else if (event.scale > 1.0) {
-            mWheelDelta = 1.0 + event.scale;
-        }
-        event.preventDefault();
+        
     };
 
     return this;

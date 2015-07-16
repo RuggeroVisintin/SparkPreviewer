@@ -32,10 +32,16 @@ JRV.include("core/RenderMesh.js");
 JRV.include("core/RenderModel.js");
 JRV.include("core/math/Vector3.js");
 
-if (JRV.isMobile.any()) {
+if (JRV.isMobile.any() && JRV.supportTouch()) {
     JRV.include("core/input/MobileInputManager.js");
 } else {
-    JRV.include("core/input/PcInputManager.js");
+    if (JRV.supportMouse()) {
+        JRV.include("core/input/PcInputManager.js");
+
+    } else if(JRV.supportTouch()) {
+        JRV.include("core/input/MobileInputManager.js");
+
+    }
 }
 
 JRV.include("core/Camera.js");
@@ -92,14 +98,11 @@ function Application(canvas, debugCanvas) {
 
         debugRenderer = debugCanvas.getContext("2d");
 
-
         debugRenderer.fillStyle = "white";
-        debugRenderer.font = "11px Lucida Console";
-        
+        debugRenderer.font = "11px Lucida Console";        
                 
         mArcballCamera = new ArcballCamera();
         mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
-
 
         initBackground();
         initShaderPrograms();
@@ -110,10 +113,14 @@ function Application(canvas, debugCanvas) {
         renderer.init();
 
         window.addEventListener('resize', onResizeEvent, false);
-        if (JRV.isMobile.any()) {
+        if (JRV.isMobile.any() && JRV.supportTouch()) {
             inputManager = new MobileInputManager(mCanvas);
         } else {
-            inputManager = new PcInputManager(mCanvas);
+            if (JRV.supportMouse()) {
+                inputManager = new PcInputManager(mCanvas);
+            } else if(supportTouch()){
+                inputManager = new MobileInputManager(mCanvas);
+            }
         }
 
     };

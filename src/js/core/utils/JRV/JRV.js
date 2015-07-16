@@ -1,17 +1,16 @@
-// The MIT License (MIT)
-
+// --------------------------------------------------------------------------------
 // Copyright (c) 2015 Ruggero Enrico Visintin
-
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,6 +18,7 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE. 
+// --------------------------------------------------------------------------------
 
 console.log("JRV.js included");
 
@@ -34,9 +34,7 @@ JRV.setBasePath = function (basePath) {
 };
 
 JRV.include = function (path) {
-
-    // check if required lib is already included
-    for (var i = 0; i < this.includedLibs.length; i++) {
+   for (var i = 0; i < this.includedLibs.length; i++) {
         if (this.basePath + path === this.includedLibs[i]) {
             return;
         }
@@ -57,15 +55,26 @@ JRV.isMobile = {
     },
 
     BlackBerry: function () {
-        return (navigator.userAgent.match(/BlackBerry/i) != null);
+        return ((navigator.userAgent.match(/BB10; Touch/i) != null) || (navigator.userAgent.match(/BlackBerry/i) != null)) || (navigator.userAgent.match(/PlayBook/i) != null);
     },
 
     iOS: function () {
         return (navigator.userAgent.match(/iPhone|iPad|iPod/i) != null);
     },
 
-    Opera: function () {
-        return (navigator.userAgent.match(/Opera Mini/i) != null);
+
+    Linux: {
+        Opera: function () {
+            return ((navigator.userAgent.match(/Opera Mini/i) != null) || (navigator.userAgent.match(/Opera Mobi/i) != null) || (navigator.userAgent.match(/MeeGo/i) != null));
+        },
+
+        Linux: function() {
+            return (navigator.userAgent.match(/Silk/i) != null);
+        },
+
+        any: function () {
+            return (this.Linux() || this.Opera());
+        }
     },
 
     Windows: function () {
@@ -73,6 +82,14 @@ JRV.isMobile = {
     },
 
     any: function () {
-        return (JRV.isMobile.Android() || JRV.isMobile.BlackBerry() || JRV.isMobile.iOS() || JRV.isMobile.Opera() || JRV.isMobile.Windows());
+        return (JRV.isMobile.Android() || JRV.isMobile.BlackBerry() || JRV.isMobile.iOS() || JRV.isMobile.Windows() || JRV.isMobile.Linux.any());
     }
+};
+
+JRV.supportTouch = function () {
+    return 'ontouchstart' in window;
+};
+
+JRV.supportMouse = function () {    
+    return 'onmousedown' in window;
 };
