@@ -47,7 +47,6 @@ JRV.include = function (path) {
 
    js.onload = function () {
        included = true;
-       console.log("included");
        return;
    };
 
@@ -110,4 +109,25 @@ JRV.waitUntil = function (condition, value, callback) {
                 return;
             }
         }, 1);
-}
+};
+
+JRV.xmlHttpGetRequest = function (path, sync, callback) {
+    var xmlhttp;
+
+    if (window.XMLHttpRequest) {
+        xmlhttp=new XMLHttpRequest();
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.onreadystatechange=function()
+    {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+            callback(xmlhttp.responseText);
+        }
+    }
+
+    xmlhttp.open("GET", path, sync);
+    xmlhttp.send();
+};

@@ -123,6 +123,9 @@ function Application(canvas, debugCanvas) {
             }
         }
 
+        JRV.xmlHttpGetRequest("modello_prova/AXE.txt", true, function (result) {
+            console.log(result);
+        });
     };
 
     this.run = function () {
