@@ -46,6 +46,7 @@ if (JRV.isMobile.any() && JRV.supportTouch()) {
 
 JRV.include("core/Camera.js");
 JRV.include("core/utils/ShapeGenerator.js");
+JRV.include("core/utils/ObjLoader.js");
 
 function Application(canvas, debugCanvas) {
 	var mCanvas = canvas;
@@ -70,24 +71,30 @@ function Application(canvas, debugCanvas) {
 	var mFps;
 	var mFrameTime;
 
+	var texture;
+
     var LIT_VERTEX_SHADER_SOURCE =
         "attribute vec3 position;" 								                     +
 		//"attribute vec3 color;" 								                     +
-        //"attribute vec2 uv;" 									                     +
+        "attribute vec2 uv;" 									                     +
 		"uniform mat4 modelViewProjectionMatrix;" 				                     +
-       "varying vec3 outColor;"									                     +
+       "varying vec3 outColor;" +
+       "varying vec2 outUv;" +
         "void main(void) {" 									                     +
-       "    outColor = position;"      								                 +
+       "    outColor = position;" +
+       "    outUv = uv;" +
 		"   vec4 pos = modelViewProjectionMatrix * vec4(position, 1.0);"             +
         "   gl_Position = pos;"       	                                             +
         "}"                                                 	                     ;
 	
     var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
         "precision mediump float;" 								                     +
-        "varying vec3 outColor;"                                                     +
+        "varying vec3 outColor;" +
+        "varying vec2 outUv;" +
+        "uniform sampler2D sampler;" +
         ""                                                                           +
         "void main(void) {"                                 	                     +
-        "   gl_FragColor = vec4(outColor, 1);" 	                                     +
+        "   gl_FragColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
         "}"                                                 	                     ;
 
     this.init = function () {
@@ -123,9 +130,7 @@ function Application(canvas, debugCanvas) {
             }
         }
 
-        JRV.xmlHttpGetRequest("modello_prova/AXE.txt", true, function (result) {
-            console.log(result);
-        });
+
     };
 
     this.run = function () {
@@ -150,27 +155,43 @@ function Application(canvas, debugCanvas) {
 	};
 	
 	var initDefaultModel = function() {
-	    var vertices = ShapeGenerator.createCube();
+	    //var vertices = ShapeGenerator.createCube().verts;
 		
-		var renderMesh = new RenderMesh();
-        var vbo = renderer.getGfx().createBuffer();
+		//var renderMesh = new RenderMesh();
+        //var vbo = renderer.getGfx().createBuffer();
 
-        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
-        renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(vertices), renderer.getGfx().STATIC_DRAW);
+        //renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
+        //renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(vertices), renderer.getGfx().STATIC_DRAW);
 
-        renderMesh.setVertexBufferHandle(vbo);
-        renderMesh.setVerticesSet(vertices);        
+        //renderMesh.setVertexBufferHandle(vbo);
+        //renderMesh.setVerticesSet(vertices);        
 
-        var renderMaterial = new RenderMaterial();
-        var renderMaterialTexture = loadTextureFromUrl("img/img.png", renderer.getGfx());
-        renderMaterial.setDiffuseTextureHandle(renderMaterialTexture);
+        //var renderMaterial = new RenderMaterial();
+	    loadTextureFromUrl("img/Lara_head_D.jpg", renderer.getGfx(), function (result) {
+	        texture = result;
 
-        var materialColor = Vector3.create(0.0, 1.0, 0.0);
-        renderMaterial.setDiffuseColor(materialColor);
+	    });
+        //renderMaterial.setDiffuseTextureHandle(renderMaterialTexture);
 
-        renderModel = new RenderModel();
-        renderModel.setRenderMesh(renderMesh);
-        renderModel.addRenderMaterial(renderMaterial);			
+        //var materialColor = Vector3.create(0.0, 1.0, 0.0);
+        //renderMaterial.setDiffuseColor(materialColor);
+
+        //renderModel = new RenderModel();
+        //renderModel.setRenderMesh(renderMesh);
+        //renderModel.addRenderMaterial(renderMaterial);
+
+        // --------------------------------------------------------------------------------------
+
+	    renderModel = new RenderModel();
+	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", function () {
+	        var vbo = renderer.getGfx().createBuffer();
+
+	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
+	        renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(renderModel.getRenderMesh().getVerticesSet()), renderer.getGfx().STATIC_DRAW);
+
+	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
+	        //renderModel.addRenderMaterial(renderMaterial);
+	    });
 	};
 	
 	lastLoop = new Date();
@@ -209,19 +230,24 @@ function Application(canvas, debugCanvas) {
 
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    //Matrix4.multiply(mvp, mModelViewMatrix, mvp);
+	    if (renderModel.getRenderMesh()) {
+	        var drawCall = new DrawCall();
 
-	    var drawCall = new DrawCall();
-	    drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	    drawCall.shaderProgram = litShaderProgram;
-	    drawCall.verticesNumber = 36;
+	    
+	        drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
+	        drawCall.shaderProgram = litShaderProgram;
+	        drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length / 5;
 
-	    drawCall.matrixMVP = mvp;
-	    drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	        drawCall.matrixMVP = mvp;
+	        drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
 
-	    drawCall.textureHandle = renderModel.getRenderMaterial(0).getDiffsueTextureHandle;
+	        console.log(texture);
 
-	    renderer.render(0, drawCall);
+	        drawCall.textureHandle = texture;
+	        drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
 
+	        renderer.render(0, drawCall);
+	    }
 	}
 
 	var updateInput = function()

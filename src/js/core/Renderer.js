@@ -22,6 +22,7 @@
 
 console.log("Renderer.js included");
 
+
 function DrawCall() {
     this.shader;
     this.vao;
@@ -32,13 +33,12 @@ function DrawCall() {
 	this.matrixMVP;
 	
 	this.mvpLocation;
+	this.textureLocation;
 }
 
 function Renderer() {
     var _status = this;
     var mGfx;
-
-    this.program;
 
     var positionsAttribLocation 		= 0;
     var normalsAttrbLocation 			= 1;
@@ -55,7 +55,7 @@ function Renderer() {
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);
 	    //mGfx.enableVertexAttribArray(normalsAttrbLocation);
-        //mGfx.enableVertexAttribArray(1);
+        mGfx.enableVertexAttribArray(1);
 
         console.log(positionsAttribLocation);
         console.log(uvsAttribLocation);
@@ -67,12 +67,19 @@ function Renderer() {
 			
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
 
-        mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 3, 0);
+        mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
         //mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 6, 4 * 3);
-		//mGfx.vertexAttribPointer(uvsAttribLocation, 2, mGfx.FLOAT, false, 4 * 4, 2 * 4);
+		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 2 * 4);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
+		if (drawCall.textureHandle) {
+		    console.log("renderTextrue");
+		    mGfx.activeTexture(mGfx.TEXTURE0);
+		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);
+		    mGfx.uniform1i(drawCall.textureLocation, 0);
+		}
+
         mGfx.drawArrays(mGfx.TRIANGLES, 0, drawCall.verticesNumber);
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, null);
     };

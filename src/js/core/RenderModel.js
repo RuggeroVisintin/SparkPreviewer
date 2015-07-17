@@ -26,6 +26,25 @@ function RenderModel() {
     var mRenderMesh;
     var mRenderMaterials = [];
 
+    this.loadFromObj = function (filePath, callback) {
+        return ObjLoader.loadObj(filePath, function (result) {
+            var verticesSet = [];
+
+            for (var i in result.posIndices) {
+                verticesSet.push(result.positions[result.posIndices[i]].x);
+                verticesSet.push(result.positions[result.posIndices[i]].y);
+                verticesSet.push(result.positions[result.posIndices[i]].z);
+                verticesSet.push(result.uvs[result.uvsIndices[i]].u);
+                verticesSet.push(result.uvs[result.uvsIndices[i]].u);
+            }
+
+            mRenderMesh = new RenderMesh();
+            mRenderMesh.setVerticesSet(verticesSet);
+
+            callback();
+        });
+    };
+
     this.setRenderMesh = function (renderMesh) {
         mRenderMesh = renderMesh;
     };

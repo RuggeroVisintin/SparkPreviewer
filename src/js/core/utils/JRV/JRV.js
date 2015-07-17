@@ -115,7 +115,7 @@ JRV.xmlHttpGetRequest = function (path, sync, callback) {
     var xmlhttp;
 
     if (window.XMLHttpRequest) {
-        xmlhttp=new XMLHttpRequest();
+        xmlhttp= new XMLHttpRequest();
     } else {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }

@@ -11,7 +11,7 @@ ShapeGenerator.createTriangle = function() {
 };
 
 ShapeGenerator.createCube = function() {
-    return [
+    var vertices = [
 		-1.0, -1.0, -1.0, // 0
 		 1.0, 1.0, -1.0, // 2
 		 1.0, -1.0, -1.0, // 1
@@ -59,4 +59,6 @@ ShapeGenerator.createCube = function() {
 		 1.0, 1.0, 1.0, // 6
 		-1.0, 1.0, 1.0, // 7
     ];
+
+    return { verts: vertices,};
 };
