@@ -35,7 +35,7 @@ function RenderModel() {
                 verticesSet.push(result.positions[result.posIndices[i]].y);
                 verticesSet.push(result.positions[result.posIndices[i]].z);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].u);
-                verticesSet.push(result.uvs[result.uvsIndices[i]].u);
+                verticesSet.push(result.uvs[result.uvsIndices[i]].v);
             }
 
             mRenderMesh = new RenderMesh();

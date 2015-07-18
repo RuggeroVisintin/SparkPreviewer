@@ -34,7 +34,6 @@ ObjLoader.loadObj = function (filePath, callback) {
                 });
             } else if (line.substring(0, 2) == "vt") {
                 var vt = line.substring(3).split(" ");
-
                 result.uvs.push({ u: parseFloat(vt[0]), v: parseFloat(vt[1]) });
 
             } else if (line.substring(0, 2) == "f ") {

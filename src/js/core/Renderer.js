@@ -69,7 +69,7 @@ function Renderer() {
 
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
         //mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 6, 4 * 3);
-		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 2 * 4);
+		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 3 * 4);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
