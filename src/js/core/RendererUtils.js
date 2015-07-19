@@ -29,7 +29,7 @@ function loadTextureFromUrl(url, gfx, callback) {
         var result = initTextureFromImage(this, gfx);
         callback(result);
     }
-    img.crossOrigin = '';
+    image.crossOrigin = '';
     image.src = url;
 }
 
