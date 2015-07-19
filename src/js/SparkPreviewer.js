@@ -144,7 +144,7 @@ function Application(canvas, debugCanvas) {
 	
 	var initMatrices = function () {
 	    mModelViewMatrix = Matrix4.create();
-	    mModelViewMatrix = Matrix4.translate(mModelViewMatrix, [0, 0, 0], mModelViewMatrix);
+	    mModelViewMatrix = Matrix4.translate(mModelViewMatrix, [0, -2, 0], mModelViewMatrix);
 	};
 
 	var initBackground = function() {
@@ -168,7 +168,7 @@ function Application(canvas, debugCanvas) {
         //renderMesh.setVerticesSet(vertices);        
 
         //var renderMaterial = new RenderMaterial();
-	    loadTextureFromUrl("img/Lara_legs_D.jpg", renderer.getGfx(), function (result) {
+	    loadTextureFromUrl("img/Lara_torso_D.jpg", renderer.getGfx(), function (result) {
 	        texture = result;
 
 	    });

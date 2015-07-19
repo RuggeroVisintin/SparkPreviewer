@@ -28,6 +28,11 @@ function RenderMaterial() {
     var mDiffuseColor;
     var mStartIndex;
 
+    var mStartIndex;
+    var mEndIndex;
+
+    var mId;
+
     this.setDiffuseColor = function (vector3) {
         mDiffuseColor = vector3;
     };
@@ -44,6 +49,22 @@ function RenderMaterial() {
         return mStartIndex;
     };
 
+    this.setEndIndex = function (endIndex) {
+        mEndIndex = endIndex;
+    };
+
+    this.getEndIndex = function () {
+        return mEndIndex;
+    };
+
+    this.setId = function (id) {
+        mId = id;
+    };
+
+    this.getId = function () {
+        return mId;
+    };
+
     this.setDiffuseTextureHandle = function (diffuseTextureHandle) {
         mDiffuseTextureHandle = diffuseTextureHandle;
     };
@@ -51,6 +72,6 @@ function RenderMaterial() {
     this.getDiffsueTextureHandle = function() {
      return mDiffuseTextureHandle;
     };
-    
+ 
     return this;
 }

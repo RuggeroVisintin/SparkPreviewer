@@ -29,6 +29,10 @@ function RenderModel() {
     this.loadFromObj = function (filePath, callback) {
         return ObjLoader.loadObj(filePath, function (result) {
             var verticesSet = [];
+            var mats = [];
+
+
+            console.warn(result.uvs.length);
 
             for (var i in result.posIndices) {
                 verticesSet.push(result.positions[result.posIndices[i]].x);
@@ -36,10 +40,23 @@ function RenderModel() {
                 verticesSet.push(result.positions[result.posIndices[i]].z);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].u);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].v);
+
+                /*for (var j in result.materials) {
+                    if (i == result.materials[j].startIndex) {
+                        var temp = result.materials[j];
+
+                        var renderMat = new RenderMaterial;
+
+                        mats[mats.length - 1].startIndex = verticesSet.length - 1;
+                    } else if (i == result.materials[j].endIndex) {
+                        mats[mats.length - 1].endIndex = verticesSet.length - 1;
+                    }
+                }*/
             }
 
             mRenderMesh = new RenderMesh();
             mRenderMesh.setVerticesSet(verticesSet);
+            //mRenderMaterials = mats;
 
             callback();
         });

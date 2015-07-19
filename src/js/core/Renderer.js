@@ -74,7 +74,6 @@ function Renderer() {
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
 		if (drawCall.textureHandle) {
-		    console.log("renderTextrue");
 		    mGfx.activeTexture(mGfx.TEXTURE0);
 		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);
 		    mGfx.uniform1i(drawCall.textureLocation, 0);
