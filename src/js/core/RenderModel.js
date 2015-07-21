@@ -31,7 +31,6 @@ function RenderModel() {
             var verticesSet = [];
             var mats = [];
 
-
             console.warn(result.uvs.length);
 
             for (var i in result.posIndices) {

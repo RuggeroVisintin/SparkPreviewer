@@ -68,6 +68,11 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
 
+                                if (result.materials[result.materials.length - 1].startIndex == null) {
+                                    result.materials[result.materials.length - 1].startIndex = posIndex;
+                                    console.log("mtl_id: " + result.materials[result.materials.length - 1].id + ", mtl_start: " + result.materials[result.materials.length - 1].startIndex);
+                                }
+
                                 result.materials[result.materials.length - 1].endIndex = posIndex;
                             }
                         }
@@ -85,21 +90,60 @@ ObjLoader.loadObj = function (filePath, callback) {
                 }
             } else if (line.substring(0, 6) == "mtllib") {
                 result.mtlFileName = line.split(" ")[1];
-            } else if (line.substring(0, 6) == "usemtl") {
-                var temp = {};
-                temp.id = line.split(" ")[1];
 
-                if (result.posIndices.length > 1) {
-                   temp.startIndex = result.posIndices.length - 1;
-                } else {
-                   temp.startIndex = 0;
-                }
+                var fileName = filePath.replace(/^.*[\\\/]/, '');
+                console.log(fileName);
+
+                var path = filePath.replace(fileName, result.mtlFileName);
+                console.log(path);
+
+                result.mtlFileName = path;
+            } else if (line.substring(0, 6) == "usemtl") {
+                var temp = { id: null, startIndex: null, endIndex: null, diffuseTextureId: null, };
+                temp.id = line.split(" ")[1];
+                temp.startIndex = null;
 
                 result.materials.push(temp);
             }
         }
 
-        callback(result);
+        ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
     });
+};
+
+ObjLoader.loadMtl = function (filePath, objModel, callback) {
+    JRV.xmlHttpGetRequest(filePath, true, function (result) {
+        if (result == null) {
+            return false;
+        }
+
+        var script = result.split("\n");
+        var tempMaterials = [];
+        var material = { id: null, diffuseTextureId: null, };
+
+
+        for (var i in script) {
+            var line = script[i];
+
+            if (line.substring(0, 6) == "newmtl") {
+                material.id = line.split(" ")[1];
+            } else if (line.substring(0, 6) == "map_Kd") {
+                material.diffuseTextureId = line.split(" ")[1];
+                console.log("mtl_id: " + material.id + ", diffuse_texture_id: " + material.diffuseTextureId);
+            }
+
+            tempMaterials.push(material);
+        }
+
+        for (var i in tempMaterials) {
+            for (var j in objModel.materials) {
+                if (objModel[j].id == tempMaterials[i].id) {
+                    objModel[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
+                }
+            }
+        }
+    });
+
+    callback(objModel);
 };
