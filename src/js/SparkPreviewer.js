@@ -231,9 +231,9 @@ function Application(canvas, debugCanvas) {
 
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
+
 	    if (renderModel.getRenderMesh()) {
 	        var drawCall = new DrawCall();
-
 	    
 	        drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	        drawCall.shaderProgram = litShaderProgram;
@@ -247,7 +247,7 @@ function Application(canvas, debugCanvas) {
 	        drawCall.textureHandle = texture;
 	        drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
 
-	        renderer.render(0, drawCall);
+            renderer.render(0, drawCall);
 	    }
 	}
 

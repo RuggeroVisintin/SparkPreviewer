@@ -138,8 +138,8 @@ ObjLoader.loadMtl = function (filePath, objModel, callback) {
 
         for (var i in tempMaterials) {
             for (var j in objModel.materials) {
-                if (objModel[j].id == tempMaterials[i].id) {
-                    objModel[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
+                if (objModel.materials[j].id == tempMaterials[i].id) {
+                    objModel.materials[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
                 }
             }
         }
