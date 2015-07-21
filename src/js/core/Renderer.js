@@ -49,9 +49,10 @@ function Renderer() {
     };
    
     this.init = function () {
-        mGfx.clear(mGfx.COLOR_BUFFER_BIT);
+        mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
         mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
         mGfx.enable(mGfx.DEPTH_TEST);
+        mGfx.enable(mGfx.CULL_FACE);
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);
 	    //mGfx.enableVertexAttribArray(normalsAttrbLocation);
@@ -69,12 +70,11 @@ function Renderer() {
 
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
         //mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 6, 4 * 3);
-		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 2 * 4);
+		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 3 * 4);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
 		if (drawCall.textureHandle) {
-		    console.log("renderTextrue");
 		    mGfx.activeTexture(mGfx.TEXTURE0);
 		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);
 		    mGfx.uniform1i(drawCall.textureLocation, 0);

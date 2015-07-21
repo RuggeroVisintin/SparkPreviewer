@@ -20,6 +20,9 @@ ObjLoader.loadObj = function (filePath, callback) {
 
             posIndices: [],
             uvsIndices: [],
+
+            mtlFileName: "",
+            materials: [],
         };
 
         for (var i in script) {
@@ -34,7 +37,6 @@ ObjLoader.loadObj = function (filePath, callback) {
                 });
             } else if (line.substring(0, 2) == "vt") {
                 var vt = line.substring(3).split(" ");
-
                 result.uvs.push({ u: parseFloat(vt[0]), v: parseFloat(vt[1]) });
 
             } else if (line.substring(0, 2) == "f ") {
@@ -65,6 +67,8 @@ ObjLoader.loadObj = function (filePath, callback) {
 
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
+
+                                result.materials[result.materials.length - 1].endIndex = posIndex;
                             }
                         }
                     } else {
@@ -79,6 +83,19 @@ ObjLoader.loadObj = function (filePath, callback) {
                         result.posIndices.push(posIndex);
                     }
                 }
+            } else if (line.substring(0, 6) == "mtllib") {
+                result.mtlFileName = line.split(" ")[1];
+            } else if (line.substring(0, 6) == "usemtl") {
+                var temp = {};
+                temp.id = line.split(" ")[1];
+
+                if (result.posIndices.length > 1) {
+                   temp.startIndex = result.posIndices.length - 1;
+                } else {
+                   temp.startIndex = 0;
+                }
+
+                result.materials.push(temp);
             }
         }
 

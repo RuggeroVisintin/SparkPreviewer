@@ -144,6 +144,7 @@ function Application(canvas, debugCanvas) {
 	
 	var initMatrices = function () {
 	    mModelViewMatrix = Matrix4.create();
+	    mModelViewMatrix = Matrix4.translate(mModelViewMatrix, [0, -2, 0], mModelViewMatrix);
 	};
 
 	var initBackground = function() {
@@ -167,7 +168,7 @@ function Application(canvas, debugCanvas) {
         //renderMesh.setVerticesSet(vertices);        
 
         //var renderMaterial = new RenderMaterial();
-	    loadTextureFromUrl("img/Lara_head_D.jpg", renderer.getGfx(), function (result) {
+	    loadTextureFromUrl("img/Lara_torso_D.jpg", renderer.getGfx(), function (result) {
 	        texture = result;
 
 	    });
@@ -229,7 +230,7 @@ function Application(canvas, debugCanvas) {
 	    var camMatrices = mArcballCamera.updateMatrices();
 
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
-	    //Matrix4.multiply(mvp, mModelViewMatrix, mvp);
+	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 	    if (renderModel.getRenderMesh()) {
 	        var drawCall = new DrawCall();
 
