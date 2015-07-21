@@ -22,11 +22,15 @@
 
 console.log("RenderModel.js included");
 
+JRV.include("core/RenderMaterial.js");
+JRV.include("core/utils/ObjLoader.js");
+JRV.include("core/utils/TgaLoader.js");
+
 function RenderModel() {
     var mRenderMesh;
     var mRenderMaterials = [];
 
-    this.loadFromObj = function (filePath, callback) {
+    this.loadFromObj = function (filePath, gfx, callback) {
         return ObjLoader.loadObj(filePath, function (result) {
             var verticesSet = [];
             var mats = [];
@@ -44,7 +48,24 @@ function RenderModel() {
             mRenderMesh = new RenderMesh();
             mRenderMesh.setVerticesSet(verticesSet);
 
-            callback();
+            for (var i in result.materials) {
+                var tempMat = new RenderMaterial();
+
+                tempMat.setStartIndex(result.materials[i].startIndex);
+                tempMat.setEndIndex(result.materials[i].endIndex);
+
+                console.log(result.materials[i].diffuseTextureId);
+
+                var tga = new TGA();
+                tga.open(result.materials[i].diffuseTextureId, function (data) {                    
+                    console.log("tga: " + data);
+
+                    //tempMat.setDiffuseTextureHandle(initTextureFromImage(data, gfx));
+                    mRenderMaterials.push(tempMat);
+
+                    callback();
+                });
+            }
         });
     };
 

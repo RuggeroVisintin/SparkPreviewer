@@ -130,20 +130,39 @@ ObjLoader.loadMtl = function (filePath, objModel, callback) {
                 material.id = line.split(" ")[1];
             } else if (line.substring(0, 6) == "map_Kd") {
                 material.diffuseTextureId = line.split(" ")[1];
-                console.log("mtl_id: " + material.id + ", diffuse_texture_id: " + material.diffuseTextureId);
-            }
 
-            tempMaterials.push(material);
-        }
+                var fileName = filePath.replace(/^.*[\\\/]/, '');
+                //console.log(fileName);
 
-        for (var i in tempMaterials) {
-            for (var j in objModel.materials) {
-                if (objModel.materials[j].id == tempMaterials[i].id) {
-                    objModel.materials[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
+                var path = filePath.replace(fileName, material.diffuseTextureId);
+                //console.log(path);
+
+                material.diffuseTextureId = path;
+
+                for (var i in objModel.materials) {
+                    if (objModel.materials[i].id === material.id) {
+
+                        objModel.materials[i].diffuseTextureId = material.diffuseTextureId;
+                        //console.log(objModel.materials[i].diffuseTextureId);
+
+                        break;
+                    }
                 }
+                
+                //console.log("mtl_id: " + material.id + ", diffuse_texture_id: " + material.diffuseTextureId);
             }
+ 
         }
-    });
 
-    callback(objModel);
+        //for (var i in tempMaterials) {
+        //    for (var j in objModel.materials) {
+        //        if (objModel.materials[j].id === tempMaterials[i].id) {
+        //            objModel.materials[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
+
+        //        }
+        //    }
+        //}
+
+        callback(objModel);
+    });
 };

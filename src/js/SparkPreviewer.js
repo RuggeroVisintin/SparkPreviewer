@@ -46,7 +46,6 @@ if (JRV.isMobile.any() && JRV.supportTouch()) {
 
 JRV.include("core/Camera.js");
 JRV.include("core/utils/ShapeGenerator.js");
-JRV.include("core/utils/ObjLoader.js");
 
 function Application(canvas, debugCanvas) {
 	var mCanvas = canvas;
@@ -167,11 +166,13 @@ function Application(canvas, debugCanvas) {
         //renderMesh.setVertexBufferHandle(vbo);
         //renderMesh.setVerticesSet(vertices);        
 
-        //var renderMaterial = new RenderMaterial();
-	    loadTextureFromUrl("img/Lara_torso_D.jpg", renderer.getGfx(), function (result) {
+	    //var renderMaterial = new RenderMaterial();
+
+	    loadTextureFromUrl("img/Lara_boots_D.jpg", renderer.getGfx(), function (result) {
 	        texture = result;
 
 	    });
+
         //renderMaterial.setDiffuseTextureHandle(renderMaterialTexture);
 
         //var materialColor = Vector3.create(0.0, 1.0, 0.0);
@@ -184,13 +185,15 @@ function Application(canvas, debugCanvas) {
         // --------------------------------------------------------------------------------------
 
 	    renderModel = new RenderModel();
-	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", function () {
+	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", renderer.getGfx(), function () {
 	        var vbo = renderer.getGfx().createBuffer();
 
 	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
 	        renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(renderModel.getRenderMesh().getVerticesSet()), renderer.getGfx().STATIC_DRAW);
 
 	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
+
+	        //texture = renderModel.getRenderMaterial(0).getDiffuseTextureHandle;
 	        //renderModel.addRenderMaterial(renderMaterial);
 	    });
 	};
@@ -233,21 +236,22 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
 	    if (renderModel.getRenderMesh()) {
-	        var drawCall = new DrawCall();
+	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {
+	            var drawCall = new DrawCall();
 	    
-	        drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	        drawCall.shaderProgram = litShaderProgram;
-	        drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length / 5;
+	            drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
+	            drawCall.shaderProgram = litShaderProgram;
+	            drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length / 5;
 
-	        drawCall.matrixMVP = mvp;
-	        drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	            drawCall.matrixMVP = mvp;
+	            drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
 
-	        console.log(texture);
+	            drawCall.textureHandle = texture;
+	            drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+	        
 
-	        drawCall.textureHandle = texture;
-	        drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
-
-            renderer.render(0, drawCall);
+	            renderer.render(0, drawCall);
+            }
 	    }
 	}
 

@@ -41,6 +41,8 @@ function initTextureFromImage(image, gfx) {
 
     gfx.pixelStorei(gfx.UNPACK_FLIP_Y_WEBGL, true);
     gfx.texImage2D(gfx.TEXTURE_2D, 0, gfx.RGBA, gfx.RGBA, gfx.UNSIGNED_BYTE, image);
+    //gfx.texImage2D(gfx.TEXTURE_2D, 0, gfx.RGBA, 1, 1, 0, gfx.RGBA, gfx.UNSIGNED_BYTE, image);
+
     gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MIN_FILTER, gfx.LINEAR);
     gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MAG_FILTER, gfx.NEAREST);
     gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MIN_FILTER, gfx.NEAREST);
