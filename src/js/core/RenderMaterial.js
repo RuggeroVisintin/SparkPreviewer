@@ -25,21 +25,11 @@ console.log("RenderMaterial.js included");
 function RenderMaterial() { 
     var mDiffuseTextureHandle;
 
-    var mDiffuseColor;
-    var mStartIndex;
-
     var mStartIndex;
     var mEndIndex;
 
     var mId;
-
-    this.setDiffuseColor = function (vector3) {
-        mDiffuseColor = vector3;
-    };
-
-    this.getMaterialColor = function () {
-        return mDiffuseColor;
-    };
+    var mOpacity;
 
     this.setStartIndex = function (startIndex) {
         mStartIndex = startIndex;
@@ -71,6 +61,14 @@ function RenderMaterial() {
     
     this.getDiffuseTextureHandle = function() {
      return mDiffuseTextureHandle;
+    };
+
+    this.setOpacity = function (opacity) {
+        mOpacity = opacity;
+    };
+
+    this.getOpacity = function () {
+        return mOpacity;
     };
  
     return this;

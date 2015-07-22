@@ -1,10 +1,34 @@
-﻿var ObjLoader = {};
+﻿// --------------------------------------------------------------------------------
+// Copyright (c) 2015 Ruggero Enrico Visintin
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE. 
+// --------------------------------------------------------------------------------
+
+var ObjLoader = {};
 
 /*
 * @param filePath - the file path of the .obj model
 * @param callback - the function to call when the model is loaded, 
 *                   the result of the loading is passed to the callback
-* returns true if the filePath exists and is an objFile
+* @param result   - the result of the parsed .obj file
+*
+* returns true if the filePath exists and is an obj file
 */
 ObjLoader.loadObj = function (filePath, callback) {
     JRV.xmlHttpGetRequest(filePath, true, function (result) {
@@ -70,8 +94,6 @@ ObjLoader.loadObj = function (filePath, callback) {
 
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
-
-                                result.materials[result.materials.length - 1].endIndex = result.posIndices.length - 1;
                             }
                         }
                     } else {
@@ -86,6 +108,12 @@ ObjLoader.loadObj = function (filePath, callback) {
                         result.posIndices.push(posIndex);
                     }
                 }
+
+                faceCount++;
+                totalFaces++;
+
+                result.materials[result.materials.length - 1].endIndex = faceCount;
+
             } else if (line.substring(0, 6) == "mtllib") {
                 result.mtlFileName = line.split(" ")[1];
 
@@ -96,15 +124,16 @@ ObjLoader.loadObj = function (filePath, callback) {
                 result.mtlFileName = path;
 
             } else if (line.substring(0, 6) == "usemtl") {
+                faceCount = 0;
                 var temp = { id: null, startIndex: null, endIndex: null, diffuseTextureId: null, };
                 temp.id = line.split(" ")[1];
-                temp.startIndex = (result.posIndices.length - 1) % 0;
+                temp.startIndex = totalFaces;
 
                 result.materials.push(temp);
             }
         }
 
-        console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + result.posIndices.length + "\nMaterialsCount: " + result.materials.length);
+        console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + totalFaces + "\nMaterialsCount: " + result.materials.length);
         ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
     });
@@ -118,50 +147,36 @@ ObjLoader.loadMtl = function (filePath, objModel, callback) {
 
         var script = result.split("\n");
         var tempMaterials = [];
-        var material = { id: null, diffuseTextureId: null, };
-
-
+        var material = { id: null, diffuseTextureId: null, opacity: null};
+        
         for (var i in script) {
             var line = script[i];
 
             if (line.substring(0, 6) == "newmtl") {
                 material.id = line.split(" ")[1];
-            } else if (line.substring(0, 6) == "map_Kd") {
-                material.diffuseTextureId = line.split(" ")[1];
 
+            } else if (line.substring(0, 2) == "d ") {
+                material.opacity = parseFloat(line.split(" ")[1]);
+            } else if (line.substring(0, 6) == "map_Kd") {
+
+                material.diffuseTextureId = line.split(" ")[1];
                 var fileName = filePath.replace(/^.*[\\\/]/, '');
-                //console.log(fileName);
 
                 var path = filePath.replace(fileName, material.diffuseTextureId);
-                //console.log(path);
-
                 material.diffuseTextureId = path;
 
                 for (var i in objModel.materials) {
                     if (objModel.materials[i].id === material.id) {
 
                         objModel.materials[i].diffuseTextureId = material.diffuseTextureId;
-                        //console.log(objModel.materials[i].diffuseTextureId);
-
+                        objModel.materials[i].opacity = material.opacity;
                         break;
                     }
                 }
-                
-                //console.log("mtl_id: " + material.id + ", diffuse_texture_id: " + material.diffuseTextureId);
             }
  
         }
 
-        //for (var i in tempMaterials) {
-        //    for (var j in objModel.materials) {
-        //        if (objModel.materials[j].id === tempMaterials[i].id) {
-        //            objModel.materials[j].diffuseTextureId = tempMaterials[i].diffuseTextureId;
-
-        //        }
-        //    }
-        //}
-
-        console.log("mtlLoaded");
         callback(objModel);
     });
 };

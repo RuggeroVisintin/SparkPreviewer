@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SparkPreviewer", "http://localhost:50518", "{9EADFCC3-8C24-4E6E-BBCE-EE252554AF17}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -25,6 +25,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SparkPreviewer", "http://lo
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 	EndGlobalSection

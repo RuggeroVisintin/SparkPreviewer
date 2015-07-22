@@ -91,9 +91,11 @@ function Application(canvas, debugCanvas) {
         "varying vec3 outColor;" +
         "varying vec2 outUv;" +
         "uniform sampler2D sampler;" +
+        "uniform float alpha;" +
         ""                                                                           +
-        "void main(void) {"                                 	                     +
-        "   gl_FragColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
+        "void main(void) {" +
+        "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
+        "   gl_FragColor = vec4(outColor.rgb * outColor.a, outColor.a);" +
         "}"                                                 	                     ;
 
     this.init = function () {
@@ -186,7 +188,6 @@ function Application(canvas, debugCanvas) {
 
 	    renderModel = new RenderModel();
 	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", renderer.getGfx(), function () {
-	        console.log("loaded");
 	        var vbo = renderer.getGfx().createBuffer();
 
 	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
@@ -194,7 +195,7 @@ function Application(canvas, debugCanvas) {
 
 	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
 
-	        texture = renderModel.getRenderMaterial(9).getDiffuseTextureHandle();
+	        //texture = renderModel.getRenderMaterial(9).getDiffuseTextureHandle();
 	        //console.log(texture)
 
 	        //renderModel.addRenderMaterial(renderMaterial);
@@ -238,31 +239,43 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
+	    var when = -1;
+
 	    if (renderModel.getRenderMesh()) {
 	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {
 
 	            renderer.startFrame(litShaderProgram);
 
-	            for (var i = 0; i < renderModel.getRenderMaterialsCount() ; i++) {
+	            //for (var i = 0; i < renderModel.getRenderMaterialsCount() ; i++) {
+	            var i = 1;
 	                var drawCall = new DrawCall();
-
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
 
-	                console.log(renderModel.getRenderMaterial(i).getEndIndex());
-
-	                drawCall.verticesNumber = renderModel.getRenderMaterial(i).getEndIndex();
-	                drawCall.verticesStart = renderModel.getRenderMaterial(i).getStartIndex();
-
+	                drawCall.verticesNumber = renderModel.getRenderMaterial(i).getEndIndex() * 3;
+	                drawCall.verticesStart = renderModel.getRenderMaterial(i).getStartIndex() * 3;
 	                drawCall.matrixMVP = mvp;
+
 	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
-
 	                drawCall.textureHandle = renderModel.getRenderMaterial(i).getDiffuseTextureHandle();
-
 	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+	                
+	                drawCall.opacity = renderModel.getRenderMaterial(i).getOpacity();
+
+	                if (drawCall.opacity < 1) {
+	                   //renderer.getGfx().disable(renderer.getGfx().DEPTH_TEST);
+	                    renderer.getGfx().enable(renderer.getGfx().BLEND);
+	                    renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
+
+	                } else {
+	                    renderer.getGfx().disable(renderer.getGfx().BLEND);
+	                    //renderer.getGfx().enable(renderer.getGfx().DEPTH_TEST);
+
+	                }
 
 	                renderer.render(0, drawCall);
-	            }
+	            //}
 
 	            renderer.endFrame();
             }
