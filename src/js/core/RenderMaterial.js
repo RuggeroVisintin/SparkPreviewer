@@ -69,7 +69,7 @@ function RenderMaterial() {
         mDiffuseTextureHandle = diffuseTextureHandle;
     };
     
-    this.getDiffsueTextureHandle = function() {
+    this.getDiffuseTextureHandle = function() {
      return mDiffuseTextureHandle;
     };
  

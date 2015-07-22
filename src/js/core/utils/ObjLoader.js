@@ -107,6 +107,7 @@ ObjLoader.loadObj = function (filePath, callback) {
             }
         }
 
+        console.log("objLoaded");
         ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
     });
@@ -163,6 +164,7 @@ ObjLoader.loadMtl = function (filePath, objModel, callback) {
         //    }
         //}
 
+        console.log("mtlLoaded");
         callback(objModel);
     });
 };

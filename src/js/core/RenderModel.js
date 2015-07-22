@@ -33,39 +33,56 @@ function RenderModel() {
     this.loadFromObj = function (filePath, gfx, callback) {
         return ObjLoader.loadObj(filePath, function (result) {
             var verticesSet = [];
-            var mats = [];
+            var mats = result.materials;
 
-            console.warn(result.uvs.length);
+            console.warn(result.positions.length);
+            console.warn(result.uvsIndices.length);
 
-            for (var i in result.posIndices) {
+            for (var i = 0; i < result.posIndices.length / 3; i++) {
                 verticesSet.push(result.positions[result.posIndices[i]].x);
                 verticesSet.push(result.positions[result.posIndices[i]].y);
                 verticesSet.push(result.positions[result.posIndices[i]].z);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].u);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].v);
             }
-
+          
             mRenderMesh = new RenderMesh();
             mRenderMesh.setVerticesSet(verticesSet);
 
-            for (var i in result.materials) {
-                var tempMat = new RenderMaterial();
+            console.log(mRenderMesh.getVerticesSet().length);
 
-                tempMat.setStartIndex(result.materials[i].startIndex);
-                tempMat.setEndIndex(result.materials[i].endIndex);
+            var tempMat;
+            var imagesCount = 0;
 
-                console.log(result.materials[i].diffuseTextureId);
+            function postLoad() {
+                tempMat = new RenderMaterial();
 
-                var tga = new TGA();
-                tga.open(result.materials[i].diffuseTextureId, function (data) {                    
-                    console.log("tga: " + data);
+                tempMat.setStartIndex(mats[imagesCount].startIndex);
+                tempMat.setEndIndex(mats[imagesCount].endIndex);
 
-                    //tempMat.setDiffuseTextureHandle(initTextureFromImage(data, gfx));
-                    mRenderMaterials.push(tempMat);
+                // have to write a good image loader, for you have to use png
+                var extension = mats[imagesCount].diffuseTextureId.split(".")[1];
+                mats[imagesCount].diffuseTextureId = mats[imagesCount].diffuseTextureId.replace("." + extension, ".png");
+            
+                if (imagesCount != (mats.length - 1)) {
+                    loadTextureFromUrl(mats[imagesCount].diffuseTextureId, gfx, function (text) {
 
+                        tempMat.setDiffuseTextureHandle(text);
+                        mRenderMaterials.push(tempMat);
+
+                        postLoad();
+
+                        imagesCount++;
+                    });
+                } else {
                     callback();
-                });
+                }
+
             }
+
+            postLoad();
+                                        
+            
         });
     };
 
@@ -83,6 +100,10 @@ function RenderModel() {
 
     this.getRenderMaterial = function (index) {
         return mRenderMaterials[index];
+    };
+
+    this.getRenderMaterialsCount = function () {
+        return mRenderMaterials.length;
     };
 
     return this;

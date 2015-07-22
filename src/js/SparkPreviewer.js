@@ -168,10 +168,10 @@ function Application(canvas, debugCanvas) {
 
 	    //var renderMaterial = new RenderMaterial();
 
-	    loadTextureFromUrl("img/Lara_boots_D.jpg", renderer.getGfx(), function (result) {
+	    /*loadTextureFromUrl("img/Lara_torso_D.jpg", renderer.getGfx(), function (result) {
 	        texture = result;
 
-	    });
+	    });*/
 
         //renderMaterial.setDiffuseTextureHandle(renderMaterialTexture);
 
@@ -186,6 +186,7 @@ function Application(canvas, debugCanvas) {
 
 	    renderModel = new RenderModel();
 	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", renderer.getGfx(), function () {
+	        console.log("loaded");
 	        var vbo = renderer.getGfx().createBuffer();
 
 	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
@@ -193,7 +194,9 @@ function Application(canvas, debugCanvas) {
 
 	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
 
-	        //texture = renderModel.getRenderMaterial(0).getDiffuseTextureHandle;
+	        texture = renderModel.getRenderMaterial(9).getDiffuseTextureHandle();
+	        //console.log(texture)
+
 	        //renderModel.addRenderMaterial(renderMaterial);
 	    });
 	};
@@ -237,20 +240,31 @@ function Application(canvas, debugCanvas) {
 
 	    if (renderModel.getRenderMesh()) {
 	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {
-	            var drawCall = new DrawCall();
-	    
-	            drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	            drawCall.shaderProgram = litShaderProgram;
-	            drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length / 5;
 
-	            drawCall.matrixMVP = mvp;
-	            drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	            renderer.startFrame(litShaderProgram);
 
-	            drawCall.textureHandle = texture;
-	            drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
-	        
+	            //for (var i = 0; i < renderModel.getRenderMaterialsCount(); i++) {
+	                var drawCall = new DrawCall();
 
-	            renderer.render(0, drawCall);
+	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
+	                drawCall.shaderProgram = litShaderProgram;
+
+	                console.log(renderModel.getRenderMaterial(11).getEndIndex());
+
+	                drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length;
+	                drawCall.verticesStart = 0;
+
+	                drawCall.matrixMVP = mvp;
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+
+	                drawCall.textureHandle = renderModel.getRenderMaterial(5).getDiffuseTextureHandle();
+
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+
+	                renderer.render(0, drawCall);
+	           //}
+
+	            renderer.endFrame();
             }
 	    }
 	}

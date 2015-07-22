@@ -28,8 +28,8 @@ function DrawCall() {
     this.vao;
     this.textureHandle;
 
+    this.verticesStart;
     this.verticesNumber;
-    this.indicesNumber;
 	this.matrixMVP;
 	
 	this.mvpLocation;
@@ -57,17 +57,26 @@ function Renderer() {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT);
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);
-	    //mGfx.enableVertexAttribArray(normalsAttrbLocation);
+        //mGfx.enableVertexAttribArray(normalsAttrbLocation);
         mGfx.enableVertexAttribArray(1);
 
         console.log(positionsAttribLocation);
         console.log(uvsAttribLocation);
     };
 
-    this.render = function (deltaTime, drawCall) {
+    this.startFrame = function(shaderProgram) {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT);
-        mGfx.useProgram(drawCall.shaderProgram);
-			
+        mGfx.useProgram(shaderProgram);
+    };
+
+    this.endFrame = function () {
+        mGfx.bindBuffer(mGfx.ARRAY_BUFFER, null);
+        mGfx.flush();
+    };
+
+    this.render = function (deltaTime, drawCall) {   	
+
+
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
 
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
@@ -77,13 +86,14 @@ function Renderer() {
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
 		if (drawCall.textureHandle) {
+		    console.log("texture: " + drawCall.textureHandle);
+
 		    mGfx.activeTexture(mGfx.TEXTURE0);
 		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);
 		    mGfx.uniform1i(drawCall.textureLocation, 0);
 		}
 
-        mGfx.drawArrays(mGfx.TRIANGLES, 0, drawCall.verticesNumber);
-        mGfx.bindBuffer(mGfx.ARRAY_BUFFER, null);
+        mGfx.drawArrays(mGfx.TRIANGLES, drawCall.verticesStart, drawCall.verticesNumber);
     };
 
     // initialization 
