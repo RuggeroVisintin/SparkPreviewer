@@ -66,7 +66,7 @@ function Renderer() {
 
     this.startFrame = function(shaderProgram) {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT);
-        mGfx.useProgram(shaderProgram);
+        mGfx.useProgram(shaderProgram); 
     };
 
     this.endFrame = function () {
@@ -74,19 +74,20 @@ function Renderer() {
         mGfx.flush();
     };
 
-    this.render = function (deltaTime, drawCall) {   	
-
+    this.render = function (deltaTime, drawCall) {
+        mGfx.blendFunc(mGfx.SRC_ALPHA, mGfx.ONE_MINUS_SRC_ALPHA);
+        mGfx.enable(mGfx.BLEND);
 
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
 
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
-        //mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 6, 4 * 3);
 		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 3 * 4);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
 		if (drawCall.textureHandle) {
 		    console.log("texture: " + drawCall.textureHandle);
+
 
 		    mGfx.activeTexture(mGfx.TEXTURE0);
 		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);

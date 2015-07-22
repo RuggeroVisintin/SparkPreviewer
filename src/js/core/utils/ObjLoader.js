@@ -71,14 +71,7 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
 
-                                if (result.materials[result.materials.length - 1].startIndex == null) {
-                                    result.materials[result.materials.length - 1].startIndex = totalFaces;
-                                    console.log("mtl_id: " + result.materials[result.materials.length - 1].id + ", mtl_start: " + result.materials[result.materials.length - 1].startIndex);
-                                }
-
-                                result.materials[result.materials.length - 1].endIndex = faceCount;
-                                faceCount++;
-
+                                result.materials[result.materials.length - 1].endIndex = result.posIndices.length - 1;
                             }
                         }
                     } else {
@@ -100,23 +93,18 @@ ObjLoader.loadObj = function (filePath, callback) {
                 console.log(fileName);
 
                 var path = filePath.replace(fileName, result.mtlFileName);
-                console.log(path);
-
                 result.mtlFileName = path;
-            } else if (line.substring(0, 6) == "usemtl") {
-                console.log("faceCount: " + faceCount);
-                totalFaces += faceCount;
-                faceCount = 0;
 
+            } else if (line.substring(0, 6) == "usemtl") {
                 var temp = { id: null, startIndex: null, endIndex: null, diffuseTextureId: null, };
                 temp.id = line.split(" ")[1];
-                temp.startIndex = null;
+                temp.startIndex = (result.posIndices.length - 1) % 0;
 
                 result.materials.push(temp);
             }
         }
 
-        console.log("objLoaded: " + totalFaces / 3 + " faceCount");
+        console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + result.posIndices.length + "\nMaterialsCount: " + result.materials.length);
         ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
     });
