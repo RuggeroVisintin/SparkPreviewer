@@ -93,7 +93,7 @@ function Renderer() {
 		    mGfx.uniform1i(drawCall.textureLocation, 0);
 		}
 
-        mGfx.drawArrays(mGfx.TRIANGLES, drawCall.verticesStart, drawCall.verticesNumber);
+		mGfx.drawArrays(mGfx.TRIANGLES, drawCall.verticesStart, drawCall.verticesNumber);
     };
 
     // initialization 

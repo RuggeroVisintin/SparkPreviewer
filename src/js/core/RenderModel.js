@@ -35,21 +35,27 @@ function RenderModel() {
             var verticesSet = [];
             var mats = result.materials;
 
+            var startIndices = [];
+            var endIndices = [];
+
             console.warn(result.positions.length);
             console.warn(result.uvsIndices.length);
 
-            for (var i = 0; i < result.posIndices.length / 3; i++) {
+            var count = 0;
+
+            for (var i = 0; i < result.posIndices.length; i++) {
                 verticesSet.push(result.positions[result.posIndices[i]].x);
                 verticesSet.push(result.positions[result.posIndices[i]].y);
                 verticesSet.push(result.positions[result.posIndices[i]].z);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].u);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].v);
-            }
+             }
           
+            console.log("count: " + count);
+
             mRenderMesh = new RenderMesh();
             mRenderMesh.setVerticesSet(verticesSet);
 
-            console.log(mRenderMesh.getVerticesSet().length);
 
             var tempMat;
             var imagesCount = 0;

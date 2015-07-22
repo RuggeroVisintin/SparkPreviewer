@@ -25,6 +25,9 @@ ObjLoader.loadObj = function (filePath, callback) {
             materials: [],
         };
 
+        var faceCount = 0;
+        var totalFaces = 0;
+
         for (var i in script) {
             var line = script[i];
 
@@ -69,11 +72,13 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 result.uvsIndices.push(uvIndex);
 
                                 if (result.materials[result.materials.length - 1].startIndex == null) {
-                                    result.materials[result.materials.length - 1].startIndex = posIndex;
+                                    result.materials[result.materials.length - 1].startIndex = totalFaces;
                                     console.log("mtl_id: " + result.materials[result.materials.length - 1].id + ", mtl_start: " + result.materials[result.materials.length - 1].startIndex);
                                 }
 
-                                result.materials[result.materials.length - 1].endIndex = posIndex;
+                                result.materials[result.materials.length - 1].endIndex = faceCount;
+                                faceCount++;
+
                             }
                         }
                     } else {
@@ -99,6 +104,10 @@ ObjLoader.loadObj = function (filePath, callback) {
 
                 result.mtlFileName = path;
             } else if (line.substring(0, 6) == "usemtl") {
+                console.log("faceCount: " + faceCount);
+                totalFaces += faceCount;
+                faceCount = 0;
+
                 var temp = { id: null, startIndex: null, endIndex: null, diffuseTextureId: null, };
                 temp.id = line.split(" ")[1];
                 temp.startIndex = null;
@@ -107,7 +116,7 @@ ObjLoader.loadObj = function (filePath, callback) {
             }
         }
 
-        console.log("objLoaded");
+        console.log("objLoaded: " + totalFaces / 3 + " faceCount");
         ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
     });

@@ -243,26 +243,26 @@ function Application(canvas, debugCanvas) {
 
 	            renderer.startFrame(litShaderProgram);
 
-	            //for (var i = 0; i < renderModel.getRenderMaterialsCount(); i++) {
+	            for (var i = 0; i < renderModel.getRenderMaterialsCount() ; i++) {
 	                var drawCall = new DrawCall();
 
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
 
-	                console.log(renderModel.getRenderMaterial(11).getEndIndex());
+	                console.log(renderModel.getRenderMaterial(i).getEndIndex());
 
-	                drawCall.verticesNumber = renderModel.getRenderMesh().getVerticesSet().length;
-	                drawCall.verticesStart = 0;
+	                drawCall.verticesNumber = renderModel.getRenderMaterial(i).getEndIndex();
+	                drawCall.verticesStart = renderModel.getRenderMaterial(i).getStartIndex();
 
 	                drawCall.matrixMVP = mvp;
 	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
 
-	                drawCall.textureHandle = renderModel.getRenderMaterial(5).getDiffuseTextureHandle();
+	                drawCall.textureHandle = renderModel.getRenderMaterial(i).getDiffuseTextureHandle();
 
 	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
 
 	                renderer.render(0, drawCall);
-	           //}
+	            }
 
 	            renderer.endFrame();
             }
