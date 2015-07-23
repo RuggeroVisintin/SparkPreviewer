@@ -95,7 +95,7 @@ function Application(canvas, debugCanvas) {
         ""                                                                           +
         "void main(void) {" +
         "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
-        "   gl_FragColor = vec4(outColor.rgb * outColor.a, outColor.a);" +
+        "   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "}"                                                 	                     ;
 
     this.init = function () {
@@ -239,43 +239,73 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
-	    var when = -1;
-
 	    if (renderModel.getRenderMesh()) {
 	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {
 
+
+	            
+
 	            renderer.startFrame(litShaderProgram);
 
-	            //for (var i = 0; i < renderModel.getRenderMaterialsCount() ; i++) {
-	            var i = 1;
+	       
+
+	            renderer.getGfx().disable(renderer.getGfx().BLEND);
+	            renderer.getGfx().depthMask(true);
+	            //renderer.getGfx().enable(renderer.getGfx().DEPTH_TEST);
+	            //renderer.getGfx().depthFunc(renderer.getGfx().LESS);
+
+
+	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
+	            //var i = 0;
+
+
+	                console.log(renderModel.getOpaqueMaterials()[i].getId() + ", " + i + ", " + renderModel.getOpaqueMaterials()[i].getStartIndex() + ", " + renderModel.getOpaqueMaterials()[i].getEndIndex());
+
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
 
-	                drawCall.verticesNumber = renderModel.getRenderMaterial(i).getEndIndex() * 3;
-	                drawCall.verticesStart = renderModel.getRenderMaterial(i).getStartIndex() * 3;
+	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()- 1) * 3;
+	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()-1) * 3;
 	                drawCall.matrixMVP = mvp;
 
 	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
-	                drawCall.textureHandle = renderModel.getRenderMaterial(i).getDiffuseTextureHandle();
+	                drawCall.textureHandle = renderModel.getOpaqueMaterials()[i].getDiffuseTextureHandle();
 	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
 	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
 	                
-	                drawCall.opacity = renderModel.getRenderMaterial(i).getOpacity();
-
-	                if (drawCall.opacity < 1) {
-	                   //renderer.getGfx().disable(renderer.getGfx().DEPTH_TEST);
-	                    renderer.getGfx().enable(renderer.getGfx().BLEND);
-	                    renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
-
-	                } else {
-	                    renderer.getGfx().disable(renderer.getGfx().BLEND);
-	                    //renderer.getGfx().enable(renderer.getGfx().DEPTH_TEST);
-
-	                }
+	                drawCall.opacity = renderModel.getOpaqueMaterials()[i].getOpacity();
 
 	                renderer.render(0, drawCall);
-	            //}
+	            }
+
+	            renderer.getGfx().depthMask(false);
+	            //renderer.getGfx().blendFuncSeparate(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA, renderer.getGfx().ONE, renderer.getGfx().ONE_MINUS_SRC_ALPHA)
+	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
+	            renderer.getGfx().enable(renderer.getGfx().BLEND);
+
+	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
+	                console.log("transparents: " + renderModel.getTransparentMaterials()[i].getId() + ", " + i + ", " + renderModel.getTransparentMaterials()[i].getOpacity());
+
+	                var drawCall = new DrawCall();
+	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
+	                drawCall.shaderProgram = litShaderProgram;
+
+	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
+	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
+	                drawCall.matrixMVP = mvp;
+
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+
+	                drawCall.opacity = renderModel.getTransparentMaterials()[i].getOpacity();
+	               
+	                renderer.render(0, drawCall);
+	            }
+
+	      
 
 	            renderer.endFrame();
             }

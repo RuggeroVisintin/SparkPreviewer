@@ -56,26 +56,22 @@ function Renderer() {
         mGfx.enable(mGfx.DEPTH_TEST);
         mGfx.enable(mGfx.CULL_FACE);
 
-        mGfx.clear(mGfx.COLOR_BUFFER_BIT);
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);
         //mGfx.enableVertexAttribArray(normalsAttrbLocation);
         mGfx.enableVertexAttribArray(1);
-
-        console.log(positionsAttribLocation);
-        console.log(uvsAttribLocation);
     };
 
     this.startFrame = function (shaderProgram) {
-        mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
+        mGfx.clear(mGfx.COLOR_BUFFER_BIT );
         //mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
         //mGfx.clear(mGfx.COLOR_BUFFER_BIT);
         mGfx.useProgram(shaderProgram);
-        mGfx.enable(mGfx.DEPTH_TEST);
+        //mGfx.enable(mGfx.DEPTH_TEST);
     };
 
     this.endFrame = function () {
-        mGfx.flush();
+        //mGfx.flush();
     };
 
     this.render = function (deltaTime, drawCall) {
@@ -109,7 +105,7 @@ function Renderer() {
     // initialization 
     this.initWebGL = function (canvas) {
         try {
-            mGfx = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+            mGfx = canvas.getContext("webgl", {alpha:false}) || canvas.getContext("experimental-webgl");
         } catch (e) { }
 
         if (!mGfx || mGfx == undefined) {

@@ -133,6 +133,11 @@ ObjLoader.loadObj = function (filePath, callback) {
             }
         }
 
+        for (var i in result.materials) {
+            console.log(result.materials[i].id + ", " + result.materials[i].diffuseTextureId + ", " + result.materials[i].startIndex + ", " + result.materials[i].endIndex);
+
+        }
+
         console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + totalFaces + "\nMaterialsCount: " + result.materials.length);
         ObjLoader.loadMtl(result.mtlFileName, result, callback);       
         return true;
@@ -166,8 +171,7 @@ ObjLoader.loadMtl = function (filePath, objModel, callback) {
                 material.diffuseTextureId = path;
 
                 for (var i in objModel.materials) {
-                    if (objModel.materials[i].id === material.id) {
-
+                    if (objModel.materials[i].id == material.id) {
                         objModel.materials[i].diffuseTextureId = material.diffuseTextureId;
                         objModel.materials[i].opacity = material.opacity;
                         break;

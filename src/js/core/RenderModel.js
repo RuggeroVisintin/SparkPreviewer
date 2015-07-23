@@ -27,7 +27,8 @@ JRV.include("core/utils/ObjLoader.js");
 
 function RenderModel() {
     var mRenderMesh;
-    var mRenderMaterials = [];
+    var mOpaqueMaterials = [];
+    var mTransparentMaterials = [];
 
     this.loadFromObj = function (filePath, gfx, callback) {
         return ObjLoader.loadObj(filePath, function (result) {
@@ -48,9 +49,10 @@ function RenderModel() {
             var tempMat;
             var imagesCount = 0;
 
-            function postLoad() {            
-                if (imagesCount < (mats.length - 2)) {
-                    console.log("Minus");
+            function postLoad() {
+                if (imagesCount < (mats.length)) {
+                    console.log("count: " + imagesCount);
+
                     tempMat = new RenderMaterial();
 
                     tempMat.setStartIndex(mats[imagesCount].startIndex);
@@ -68,32 +70,25 @@ function RenderModel() {
 
                         var i = 0;
 
-                        for (i = 0; i < mRenderMaterials.length; i++) {
-                            if (mRenderMaterials[i].getOpacity() <= tempMat.getOpacity()) {
-                                break;
-                            }
+                        if (tempMat.getOpacity() < 1) {
+                            mTransparentMaterials.push(tempMat);
+                        } else {
+                            mOpaqueMaterials.push(tempMat);
                         }
+                        
+                        // mRenderMaterials.push(tempMat);
+                        console.log(mats[imagesCount].id + ", " + mats[imagesCount].startIndex + ", " + tempMat.getEndIndex());
 
-                        mRenderMaterials.splice(i, 0, tempMat);
-
-                       // mRenderMaterials.push(tempMat);
-                        postLoad();
                         imagesCount++;
+                        postLoad();
                     });
                 } else {
-                    console.log("greater");
-
-                    for (var i = 0; i < mRenderMaterials.length; i++) {
-                        console.log(mRenderMaterials[i].getId() + ", " + i);
-                    }
-
                     callback();
                 }
 
             }
 
-            postLoad();
-                                        
+            postLoad();                                       
             
         });
     };
@@ -106,16 +101,12 @@ function RenderModel() {
         return mRenderMesh;
     };
 
-    this.addRenderMaterial = function (renderMaterial) {
-        mRenderMaterials.push(renderMaterial);
+    this.getTransparentMaterials = function () {
+        return mTransparentMaterials;
     };
 
-    this.getRenderMaterial = function (index) {
-        return mRenderMaterials[index];
-    };
-
-    this.getRenderMaterialsCount = function () {
-        return mRenderMaterials.length;
+    this.getOpaqueMaterials = function () {
+        return mOpaqueMaterials
     };
 
     return this;
