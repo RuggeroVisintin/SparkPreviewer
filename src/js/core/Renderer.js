@@ -54,7 +54,7 @@ function Renderer() {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
         mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
         mGfx.enable(mGfx.DEPTH_TEST);
-        mGfx.enable(mGfx.CULL_FACE);
+        //mGfx.enable(mGfx.CULL_FACE);
 
 
         mGfx.enableVertexAttribArray(positionsAttribLocation);

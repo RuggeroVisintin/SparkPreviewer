@@ -69,6 +69,7 @@ function Application(canvas, debugCanvas) {
 	var running;	
 	var mFps;
 	var mFrameTime;
+	var load = false;
 
 	var texture;
 
@@ -196,6 +197,7 @@ function Application(canvas, debugCanvas) {
 	        renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(renderModel.getRenderMesh().getVerticesSet()), renderer.getGfx().STATIC_DRAW);
 
 	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
+	        load = true;
 
 	        //texture = renderModel.getRenderMaterial(9).getDiffuseTextureHandle();
 	        //console.log(texture)
@@ -215,9 +217,13 @@ function Application(canvas, debugCanvas) {
 	    updateInput();
 	    updateRendering();
 
-        debugRenderer.clearRect(0, 0, 300, 50);
+        debugRenderer.clearRect(0, 0, 300, 70);
         debugRenderer.fillText("Fps: " + mFps, 10, 10);
         debugRenderer.fillText("Frame Time: " + mFrameTime, 10, 30);
+
+        if (load == false) {
+            debugRenderer.fillText("Loading", 10, 50);
+        }
 	
 	    if (running) {
 			window.requestAnimationFrame(runLoop);
