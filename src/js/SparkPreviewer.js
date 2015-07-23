@@ -259,10 +259,7 @@ function Application(canvas, debugCanvas) {
 
 
 	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
-	            //var i = 0;
-
-
-	                console.log(renderModel.getOpaqueMaterials()[i].getId() + ", " + i + ", " + renderModel.getOpaqueMaterials()[i].getStartIndex() + ", " + renderModel.getOpaqueMaterials()[i].getEndIndex());
+	                //var i = 0;
 
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
@@ -288,8 +285,6 @@ function Application(canvas, debugCanvas) {
 	            renderer.getGfx().enable(renderer.getGfx().BLEND);
 
 	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
-	                console.log("transparents: " + renderModel.getTransparentMaterials()[i].getId() + ", " + renderModel.getTransparentMaterials()[i].getEndIndex() * 3 + ", " + renderModel.getTransparentMaterials()[i].getStartIndex());
-
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
@@ -325,6 +320,14 @@ function Application(canvas, debugCanvas) {
 
             mArcballCamera.rotateY(verticalDelta);
             mArcballCamera.rotateX(horizontalDelta);
+	    }
+
+	    if (inputManager.isRightMouseDown()) {
+	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
+	        var verticalDelta = inputManager.getMouseVerticalDelta();
+
+	        mArcballCamera.translateX(horizontalDelta * 0.05);
+	        mArcballCamera.translateY(-verticalDelta * 0.05);
 	    }
 
 	    if (inputManager.getWheelDelta() != 0) {	        

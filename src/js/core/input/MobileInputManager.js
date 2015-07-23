@@ -65,7 +65,7 @@ function MobileInputManager(target) {
         return mLeftMouseDown;
     };
 
-    this.isRightMouseDonw = function () {
+    this.isRightMouseDown = function () {
         return mRightMouseDown;
     };
 
@@ -89,8 +89,7 @@ function MobileInputManager(target) {
                 break;
             case 2:
                 console.log("doubleTouchDown");
-                mRightMouseDown = true;
-                
+                mRightMouseDown = true;                
         }
 
         mMouseX = event.touches[0].pageX;
@@ -109,22 +108,11 @@ function MobileInputManager(target) {
                 console.log("doubleTouchUp");
                 mRightMouseDown = false;
         }
-
-
     };
 
     var handleMouseMove = function (event) {
-        if (mLeftMouseDown) {
-            mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
-            mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
-        } else if (mRightMouseDown) {
-            // do nothing
-        }
-
-        console.log("mouse is moving: " + mMouseHorizontalDelta);
-
-        mMouseX = event.touches[0].pageX;
-        mMouseY = event.touches[0].pageY;
+        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
 
         event.preventDefault();
     };

@@ -52,7 +52,7 @@ function Renderer() {
    
     this.init = function () {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
-        mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
+        mGfx.clearColor(0.0, 0.0, 0.0, 0.0);
         mGfx.enable(mGfx.DEPTH_TEST);
         //mGfx.enable(mGfx.CULL_FACE);
 
@@ -63,21 +63,15 @@ function Renderer() {
     };
 
     this.startFrame = function (shaderProgram) {
-        mGfx.clear(mGfx.COLOR_BUFFER_BIT );
-        //mGfx.clearColor(0.0, 0.0, 0.0, 1.0);
-        //mGfx.clear(mGfx.COLOR_BUFFER_BIT);
+        mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
         mGfx.useProgram(shaderProgram);
-        //mGfx.enable(mGfx.DEPTH_TEST);
     };
 
     this.endFrame = function () {
-        //mGfx.flush();
+        mGfx.flush();
     };
 
     this.render = function (deltaTime, drawCall) {
-        //mGfx.blendFunc(mGfx.SRC_ALPHA, mGfx.ONE_MINUS_SRC_ALPHA);
-        // mGfx.enable(mGfx.BLEND);
-        
 
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
         mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
@@ -94,7 +88,6 @@ function Renderer() {
 		}
 
 		mGfx.uniform1f(drawCall.alphaLocation, drawCall.opacity);
-
 
 		mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
 		mGfx.drawArrays(mGfx.TRIANGLES, drawCall.verticesStart, drawCall.verticesNumber);

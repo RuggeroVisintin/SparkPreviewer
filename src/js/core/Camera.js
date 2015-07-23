@@ -23,10 +23,12 @@
 console.log("Camera.js included");
 
 JRV.include("core/math/Matrix4.js");
+JRV.include("core/math/Vector3.js");
 
 function ArcballCamera() {
     var mPhi                = 90 * Math.PI / 180;
-    var mTheta              = 0 * Math.PI / 180;
+    var mTheta = 0 * Math.PI / 180;
+    var position = Vector3.create();
     
     // this is useless junk for now
     // var mTargetX            = 0;  
@@ -37,7 +39,7 @@ function ArcballCamera() {
     var mProjectionMatrix   = Matrix4.create();
     var mViewMatrix = Matrix4.create();
 
-    Matrix4.perspective(45, 800 / 600, 0.1, 100, mProjectionMatrix);
+    Matrix4.perspective(45, 800 / 600, 0.1, 1000, mProjectionMatrix);
 
     this.rotateX = function (deltaRads) {
         mTheta += deltaRads * 0.02;
@@ -63,25 +65,33 @@ function ArcballCamera() {
         console.log("deltaRadius: " + deltaRadius);
 
         if (deltaRadius > mRadius) {
-            if (mRadius < 150) {
-                mRadius += 0.5;
+            if (mRadius < 1000) {
+                mRadius += 0.1 * (mRadius - 0);
             }
         } else {
-            if (mRadius > 0.5) {
-                mRadius -= 0.5;
+            if (mRadius > 0.1) {
+                mRadius -= 0.1 * (mRadius - 0);
             }
         }
     };
 
     this.updateMatrices = function () {
-        var eyeX = mRadius * Math.sin(mTheta) * Math.sin(mPhi);
-        var eyeY = mRadius * Math.cos(mPhi);
+        var eyeX = mRadius * Math.sin(mTheta) * Math.sin(mPhi) + position[0];
+        var eyeY = mRadius * Math.cos(mPhi) + position[1];
         var eyeZ = mRadius * Math.cos(mTheta) * Math.sin(mPhi);
 
-        Matrix4.lookAt([eyeX, eyeY, eyeZ], [0, 0, 0], [0, 1, 0], mViewMatrix);
+        Matrix4.lookAt([eyeX, eyeY, eyeZ], [position[0], position[1], 0], [0, 1, 0], mViewMatrix);
 
         return [mProjectionMatrix, mViewMatrix];
     };
+
+    this.translateX = function (translation) {
+        //position[0] += translation;
+    };
+
+    this.translateY = function (translation) {
+        position[1] += translation;
+    }
 
     this.setViewport = function (fov, ratio) {
         Matrix4.perspective(fov, ratio, 0.1, 100, mProjectionMatrix);

@@ -61,7 +61,7 @@ function PcInputManager(target) {
         return mLeftMouseDown;
     };
 
-    this.isRightMouseDonw = function () {
+    this.isRightMouseDown = function () {
         return mRightMouseDown;
     };
 
