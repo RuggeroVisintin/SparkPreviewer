@@ -135,7 +135,6 @@ ObjLoader.loadObj = function (filePath, callback) {
 
         for (var i in result.materials) {
             console.log(result.materials[i].id + ", " + result.materials[i].diffuseTextureId + ", " + result.materials[i].startIndex + ", " + result.materials[i].endIndex);
-
         }
 
         console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + totalFaces + "\nMaterialsCount: " + result.materials.length);

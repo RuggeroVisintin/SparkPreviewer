@@ -74,7 +74,7 @@ function Application(canvas, debugCanvas) {
 
     var LIT_VERTEX_SHADER_SOURCE =
         "attribute vec3 position;" 								                     +
-		//"attribute vec3 color;" 								                     +
+		"attribute vec3 color;" 								                     +
         "attribute vec2 uv;" 									                     +
 		"uniform mat4 modelViewProjectionMatrix;" 				                     +
        "varying vec3 outColor;" +
@@ -95,6 +95,7 @@ function Application(canvas, debugCanvas) {
         ""                                                                           +
         "void main(void) {" +
         "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
+        "   if(outColor.a < 0.5) { discard; }" +
         "   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "}"                                                 	                     ;
 
@@ -187,7 +188,8 @@ function Application(canvas, debugCanvas) {
         // --------------------------------------------------------------------------------------
 
 	    renderModel = new RenderModel();
-	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", renderer.getGfx(), function () {
+	    renderModel.loadFromObj("Edward_Kenway/Edward_Kenway.obj", renderer.getGfx(), function () {
+	    //renderModel.loadFromObj("modello_prova/Lara_croft.obj", renderer.getGfx(), function () {
 	        var vbo = renderer.getGfx().createBuffer();
 
 	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
@@ -240,19 +242,14 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
 	    if (renderModel.getRenderMesh()) {
-	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {
+	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {            
 
-
-	            
-
-	            renderer.startFrame(litShaderProgram);
-
-	       
+	            renderer.startFrame(litShaderProgram);	       
 
 	            renderer.getGfx().disable(renderer.getGfx().BLEND);
-	            renderer.getGfx().depthMask(true);
+	            //renderer.getGfx().depthMask(true);
 	            //renderer.getGfx().enable(renderer.getGfx().DEPTH_TEST);
-	            //renderer.getGfx().depthFunc(renderer.getGfx().LESS);
+	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
 
 
 	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
@@ -265,8 +262,8 @@ function Application(canvas, debugCanvas) {
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
 
-	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()- 1) * 3;
-	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()-1) * 3;
+	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()) * 3;
+	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()) * 3;
 	                drawCall.matrixMVP = mvp;
 
 	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
@@ -279,13 +276,13 @@ function Application(canvas, debugCanvas) {
 	                renderer.render(0, drawCall);
 	            }
 
-	            renderer.getGfx().depthMask(false);
+	            //renderer.getGfx().depthMask(false);
 	            //renderer.getGfx().blendFuncSeparate(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA, renderer.getGfx().ONE, renderer.getGfx().ONE_MINUS_SRC_ALPHA)
 	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
 	            renderer.getGfx().enable(renderer.getGfx().BLEND);
 
 	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
-	                console.log("transparents: " + renderModel.getTransparentMaterials()[i].getId() + ", " + i + ", " + renderModel.getTransparentMaterials()[i].getOpacity());
+	                console.log("transparents: " + renderModel.getTransparentMaterials()[i].getId() + ", " + renderModel.getTransparentMaterials()[i].getEndIndex() * 3 + ", " + renderModel.getTransparentMaterials()[i].getStartIndex());
 
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();

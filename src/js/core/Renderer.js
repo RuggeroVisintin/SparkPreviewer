@@ -105,7 +105,7 @@ function Renderer() {
     // initialization 
     this.initWebGL = function (canvas) {
         try {
-            mGfx = canvas.getContext("webgl", {alpha:false}) || canvas.getContext("experimental-webgl");
+            mGfx = canvas.getContext("webgl", { alpha: false, antialias: true}) || canvas.getContext("experimental-webgl");
         } catch (e) { }
 
         if (!mGfx || mGfx == undefined) {
