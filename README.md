@@ -35,3 +35,13 @@ To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 ```
 
 NOTE: remember to add the following lines in the web.config file, otherwise you may get a 404 error from broswer when trying to load files such .obj
+
+```
+<system.webServer>
+       <staticContent>
+              <mimeMap fileExtension=".obj" mimeType="text/plain"/>
+              <mimeMap fileExtension=".tga" mimeType="application/tga"/>
+              <mimeMap fileExtension=".mtl" mimeType="text/plain"/>
+       </staticContent>
+</system.webServer>
+```
