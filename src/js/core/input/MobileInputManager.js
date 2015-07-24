@@ -111,8 +111,8 @@ function MobileInputManager(target) {
     };
 
     var handleMouseMove = function (event) {
-        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
-        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
+        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.02;
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.02;
 
         event.preventDefault();
     };

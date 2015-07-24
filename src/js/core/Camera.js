@@ -39,21 +39,21 @@ function ArcballCamera() {
     var mProjectionMatrix   = Matrix4.create();
     var mViewMatrix = Matrix4.create();
 
-    Matrix4.perspective(45, 800 / 600, 0.1, 1000, mProjectionMatrix);
+    Matrix4.perspective(70, 800 / 600, 0.1, 1000, mProjectionMatrix);
 
     this.rotateX = function (deltaRads) {
-        mTheta += deltaRads * 0.02;
+        mTheta += deltaRads;
     };
 
     // i'll keep it locked till i'll solve matrices multiplication error
     this.rotateY = function (deltaRads) {
         if (deltaRads > 0) {
-            if (((mPhi + (deltaRads * 0.02)) * 180 / Math.PI) < 170) {
-                mPhi += (deltaRads * 0.02);
+            if (((mPhi + (deltaRads)) * 180 / Math.PI) < 170) {
+                mPhi += (deltaRads);
             }
         } else if (deltaRads < 0) {
-            if (((mPhi + (deltaRads * 0.02)) * 180 / Math.PI) > 10) {
-                mPhi += (deltaRads * 0.02);
+            if (((mPhi + (deltaRads)) * 180 / Math.PI) > 10) {
+                mPhi += (deltaRads);
             }
         }
 

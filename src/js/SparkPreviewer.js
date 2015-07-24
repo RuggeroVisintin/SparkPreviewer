@@ -122,7 +122,7 @@ function Application(canvas, debugCanvas) {
         renderer.program = litShaderProgram;		
         renderer.init();
 
-        window.addEventListener('resize', onResizeEvent, false);
+        // window.addEventListener('resize', onResizeEvent, false);
         if (JRV.isMobile.any() && JRV.supportTouch()) {
             inputManager = new MobileInputManager(mCanvas);
         } else {
@@ -234,7 +234,7 @@ function Application(canvas, debugCanvas) {
 		lastLoop = thisLoop;
 	};
 
-	var onResizeEvent = function () {
+	window.onresize = function () {
 	    console.log("Resizing");
 	    mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
    	};
@@ -318,8 +318,8 @@ function Application(canvas, debugCanvas) {
 	        var verticalDelta = inputManager.getMouseVerticalDelta();
 	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
 
-            mArcballCamera.rotateY(verticalDelta);
-            mArcballCamera.rotateX(horizontalDelta);
+            mArcballCamera.rotateY(verticalDelta * 0.02);
+            mArcballCamera.rotateX(horizontalDelta * 0.02);
 	    }
 
 	    if (inputManager.isRightMouseDown()) {
