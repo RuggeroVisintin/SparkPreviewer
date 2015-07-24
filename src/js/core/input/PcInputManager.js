@@ -39,7 +39,7 @@ function PcInputManager(target) {
         target.addEventListener('mousedown', handleMouseDown, false);
         target.addEventListener('mouseup', handleMouseUp, false);
         target.addEventListener('mousemove', handleMouseMove, false);
-        target.addEventListener('mousewheel', handleWheelDelta, false);
+        target.addEventListener('wheel', handleWheelDelta, false);
         target.oncontextmenu = function (e) { e.preventDefault(); };
     };
 
@@ -133,7 +133,7 @@ function PcInputManager(target) {
     };
 
     var handleWheelDelta = function (event) {
-        mWheelDelta = event.wheelDelta;
+        mWheelDelta = event.deltaY;
         console.log("wheelIsMoving: " + mWheelDelta);
 
         event.preventDefault();
