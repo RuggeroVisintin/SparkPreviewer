@@ -1,5 +1,4 @@
-Enjoy SparkPreviewer HTML5 WebGL based runtime model previewer, please note that the script is in early stage status so it is only showing a rotating triangle 8(.
-
+Enjoy SparkPreviewer HTML5 WebGL based runtime model previewer, now width brand new .obj models nearly total support, yeaaah.
 If you want to check for update you only need click on this link:
 
 http://www.quartaibvisintin.altervista.org/Canvas%20Examples/webgl_previewer/index.html
