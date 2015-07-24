@@ -1,4 +1,4 @@
-Enjoy SparkViewer, an HTML5 and WebGL based runtime model viewer, now with brand new .obj models nearly total support, yeaaah.
+Enjoy SparkViewer, an HTML5 and WebGL based runtime model viewer, now with nearly total support to brand new .obj models, yeaaah.
 
 If you want to check for update you only need click on this link:
 http://www.quartaibvisintin.altervista.org/Canvas%20Examples/webgl_previewer/index.html
