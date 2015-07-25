@@ -1,40 +1,34 @@
-Enjoy SparkPreviewer HTML5 WebGL based runtime model previewer, please note that the script is in early stage status so it is only showing a rotating triangle 8(.
+Enjoy SparkViewer, an HTML5 and WebGL based runtime model viewer, now with nearly total support to brand new .obj models, yeaaah.
 
 If you want to check for update you only need click on this link:
-
 http://www.quartaibvisintin.altervista.org/Canvas%20Examples/webgl_previewer/index.html
 
 To use SparkPreviewer libs folder and SparkViewer.js has to stay togheter so
 
-1. You MUST have "SparkPreviewer.js" file and "core" folder in the same location of the filesystem otherwhise the previewer is not going to work.
+1) You MUST have "SparkPreviewer.js" file and "core" folder in the same location of the filesystem otherwhise the previewer is not going to work.
 
-2. do NOT DELETE the "SparkPreviewer.js" file NOR the "core" folder otherwhise the previewer is not going to work.
+2) do NOT DELETE the "SparkPreviewer.js" file NOR the "core" folder otherwhise the previewer is not going to work.
 
-3. you have to copy and paste the following lines of HTML code where you want the previewer to appear and also replace the "src" string to match your "SparkPreviewer.js" file location:
+3) you have to copy and paste the following lines of HTML code where you want the previewer to appear and also replace the "src" string to match your "SparkPreviewer.js" file location:
 
-============================================================================= 
 ```
-       <!--replace the path with a correct one-->
-       <script src= "path/to/SparkPreviewer.js"></script>
-<canvas id = "sparkViewer" width = "800" height = "600">
-        You have to update your broswer to use the SparkViewer viewer
-</canvas>
- ```
- =============================================================================
-        
-4. additionally if you want to use the default style of the editor you also have to add the following lines of code:
-
-============================================================================= 
-```<!-- the following lines are optional and usefull only if you want the previewer to activate on a mouseClick-->
-<style>
-    #sparkViewer {
-                     /* replace the path with a correct one */
-                     background-image: url(location/To/Image/You/Want/To/Use/As/Background); 
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-</style>
+<!--replace the path with a correct one-->
+<script src= "path/to/SparkPreviewer.js"></script>
+<script src= "path/to/JRV.js"></script>
+       <canvas id = "sparkViewer" width = "800" height = "600">
+              You have to update your broswer to use the SparkViewer viewer
+       </canvas>
 ```
- =============================================================================
+4) additionally if you want to use the default style of the editor you also have to add the following lines of code:
 
 NOTE: remember to add the following lines in the web.config file, otherwise you may get a 404 error from broswer when trying to load files such .obj
+
+```
+<system.webServer>
+       <staticContent>
+              <mimeMap fileExtension=".obj" mimeType="text/plain"/>
+              <mimeMap fileExtension=".tga" mimeType="application/tga"/>
+              <mimeMap fileExtension=".mtl" mimeType="text/plain"/>
+       </staticContent>
+</system.webServer>
+```

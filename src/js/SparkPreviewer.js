@@ -32,15 +32,15 @@ JRV.include("core/RenderMesh.js");
 JRV.include("core/RenderModel.js");
 JRV.include("core/math/Vector3.js");
 
+SparkPreviewerMain();
+
 if (JRV.isMobile.any() && JRV.supportTouch()) {
     JRV.include("core/input/MobileInputManager.js");
 } else {
     if (JRV.supportMouse()) {
         JRV.include("core/input/PcInputManager.js");
-
     } else if(JRV.supportTouch()) {
         JRV.include("core/input/MobileInputManager.js");
-
     }
 }
 
@@ -97,6 +97,7 @@ function Application(canvas, debugCanvas) {
         "void main(void) {" +
         "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
         "   if(outColor.a < 0.5) { discard; }" +
+        //"   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "}"                                                 	                     ;
 
@@ -122,7 +123,6 @@ function Application(canvas, debugCanvas) {
         renderer.program = litShaderProgram;		
         renderer.init();
 
-        // window.addEventListener('resize', onResizeEvent, false);
         if (JRV.isMobile.any() && JRV.supportTouch()) {
             inputManager = new MobileInputManager(mCanvas);
         } else {
@@ -133,7 +133,7 @@ function Application(canvas, debugCanvas) {
             }
         }
 
-
+        inputManager.init();
     };
 
     this.run = function () {
@@ -147,7 +147,6 @@ function Application(canvas, debugCanvas) {
 	
 	var initMatrices = function () {
 	    mModelViewMatrix = Matrix4.create();
-	    mModelViewMatrix = Matrix4.translate(mModelViewMatrix, [0, -2, 0], mModelViewMatrix);
 	};
 
 	var initBackground = function() {
@@ -159,35 +158,6 @@ function Application(canvas, debugCanvas) {
 	};
 	
 	var initDefaultModel = function() {
-	    //var vertices = ShapeGenerator.createCube().verts;
-		
-		//var renderMesh = new RenderMesh();
-        //var vbo = renderer.getGfx().createBuffer();
-
-        //renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
-        //renderer.getGfx().bufferData(renderer.getGfx().ARRAY_BUFFER, new Float32Array(vertices), renderer.getGfx().STATIC_DRAW);
-
-        //renderMesh.setVertexBufferHandle(vbo);
-        //renderMesh.setVerticesSet(vertices);        
-
-	    //var renderMaterial = new RenderMaterial();
-
-	    /*loadTextureFromUrl("img/Lara_torso_D.jpg", renderer.getGfx(), function (result) {
-	        texture = result;
-
-	    });*/
-
-        //renderMaterial.setDiffuseTextureHandle(renderMaterialTexture);
-
-        //var materialColor = Vector3.create(0.0, 1.0, 0.0);
-        //renderMaterial.setDiffuseColor(materialColor);
-
-        //renderModel = new RenderModel();
-        //renderModel.setRenderMesh(renderMesh);
-        //renderModel.addRenderMaterial(renderMaterial);
-
-        // --------------------------------------------------------------------------------------
-
 	    renderModel = new RenderModel();
 	    renderModel.loadFromObj("Edward_Kenway/Edward_Kenway.obj", renderer.getGfx(), function () {
 	    //renderModel.loadFromObj("modello_prova/Lara_croft.obj", renderer.getGfx(), function () {
@@ -198,11 +168,6 @@ function Application(canvas, debugCanvas) {
 
 	        renderModel.getRenderMesh().setVertexBufferHandle(vbo);
 	        load = true;
-
-	        //texture = renderModel.getRenderMaterial(9).getDiffuseTextureHandle();
-	        //console.log(texture)
-
-	        //renderModel.addRenderMaterial(renderMaterial);
 	    });
 	};
 	
@@ -247,19 +212,13 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
-	    if (renderModel.getRenderMesh()) {
-	        if (renderModel.getRenderMesh().getVertexBufferHandle()) {            
-
+	    if (load) {
 	            renderer.startFrame(litShaderProgram);	       
 
 	            renderer.getGfx().disable(renderer.getGfx().BLEND);
-	            //renderer.getGfx().depthMask(true);
-	            //renderer.getGfx().enable(renderer.getGfx().DEPTH_TEST);
 	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
 
-
 	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
-	                //var i = 0;
 
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
@@ -279,8 +238,6 @@ function Application(canvas, debugCanvas) {
 	                renderer.render(0, drawCall);
 	            }
 
-	            //renderer.getGfx().depthMask(false);
-	            //renderer.getGfx().blendFuncSeparate(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA, renderer.getGfx().ONE, renderer.getGfx().ONE_MINUS_SRC_ALPHA)
 	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
 	            renderer.getGfx().enable(renderer.getGfx().BLEND);
 
@@ -303,17 +260,12 @@ function Application(canvas, debugCanvas) {
 	                renderer.render(0, drawCall);
 	            }
 
-	      
-
 	            renderer.endFrame();
             }
 	    }
-	}
 
 	var updateInput = function()
 	{
-	    inputManager.update();
-
 	    if (inputManager.isLeftMouseDown()) {
 	        var verticalDelta = inputManager.getMouseVerticalDelta();
 	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
@@ -331,7 +283,7 @@ function Application(canvas, debugCanvas) {
 	    }
 
 	    if (inputManager.getWheelDelta() != 0) {	        
-	        mArcballCamera.moveRadius(inputManager.getWheelDelta() / 120);
+	        mArcballCamera.moveRadius(-inputManager.getWheelDelta() / 120);
 	    }
 
 	    inputManager.postUpdate();
@@ -363,5 +315,3 @@ function SparkPreviewerMain() {
 
     return 0;
 }
-
-SparkPreviewerMain();

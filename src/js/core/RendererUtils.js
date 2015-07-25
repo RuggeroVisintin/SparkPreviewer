@@ -41,15 +41,6 @@ function initTextureFromImage(image, gfx) {
 
     gfx.pixelStorei(gfx.UNPACK_FLIP_Y_WEBGL, true);
     gfx.texImage2D(gfx.TEXTURE_2D, 0, gfx.RGBA, gfx.RGBA, gfx.UNSIGNED_BYTE, image);
-    //gfx.pixelStorei(gfx.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
-    //gfx.texImage2D(gfx.TEXTURE_2D, 0, gfx.RGBA, 1, 1, 0, gfx.RGBA, gfx.UNSIGNED_BYTE, image);
-
-    //gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MIN_FILTER, gfx.LINEAR);
-    //gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MAG_FILTER, gfx.LINEAR_MIPMAP_NEAREST);
-    //gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_MIN_FILTER, gfx.LINEAR_MIPMAP_NEAREST);
-    //gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_WRAP_S, gfx.CLAMP_TO_EDGE);
-    //gfx.texParameteri(gfx.TEXTURE_2D, gfx.TEXTURE_WRAP_T, gfx.CLAMP_TO_EDGE);
-
     gfx.generateMipmap(gfx.TEXTURE_2D);
     gfx.bindTexture(gfx.TEXTURE_2D, null);
     

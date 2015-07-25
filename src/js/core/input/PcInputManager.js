@@ -22,8 +22,7 @@
 
 console.log("PcInputManager.js included");
 
-function PcInputManager(target) {
-   
+function PcInputManager(target) {   
     var mMouseX;
     var mMouseY;
 
@@ -35,11 +34,11 @@ function PcInputManager(target) {
     var mMouseHorizontalDelta;
     var mMouseVerticalDelta;
 
-    this.update = function () {
+    this.init = function () {
         target.addEventListener('mousedown', handleMouseDown, false);
         target.addEventListener('mouseup', handleMouseUp, false);
         target.addEventListener('mousemove', handleMouseMove, false);
-        target.addEventListener('mousewheel', handleWheelDelta, false);
+        target.addEventListener('wheel', handleWheelDelta, false);
         target.oncontextmenu = function (e) { e.preventDefault(); };
     };
 
@@ -100,7 +99,6 @@ function PcInputManager(target) {
     };
 
     var handleMouseUp = function (event) {
-
         switch (event.which) {
             case 1:
                 console.log("LeftMouseUp");
@@ -133,7 +131,7 @@ function PcInputManager(target) {
     };
 
     var handleWheelDelta = function (event) {
-        mWheelDelta = event.wheelDelta;
+        mWheelDelta = event.deltaY;
         console.log("wheelIsMoving: " + mWheelDelta);
 
         event.preventDefault();

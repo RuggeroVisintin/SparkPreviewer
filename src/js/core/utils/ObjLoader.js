@@ -68,12 +68,14 @@ ObjLoader.loadObj = function (filePath, callback) {
 
             } else if (line.substring(0, 2) == "f ") {
                 var face = line.substring(2).split(" ");
-                for (var i in face) {
-                    if (face[i] != "") {
-                        if (face[i].indexOf("/") != -1) {
-                            var index;
+                var tempCount = 0;
 
-                            if(face[i].indexOf("//") != -1) {
+                for (var i in face) {
+                    if (face[i] != "") {                        
+                        if (face[i].indexOf("/") != -1) {
+                            //console.log(face[i]);
+
+                            if (face[i].indexOf("//") != -1) {
                                 index = face[i].split("//");
                             } else {
                                 index = face[i].split("/");
@@ -81,31 +83,43 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 var uvIndex = parseInt(index[1]);
 
                                 if (posIndex < 0) {
-                                    posIndex += 1;
+                                    //console.log(result.positions.length + " - " + posIndex + " = " + (result.positions.length + posIndex));
+                                    posIndex = result.positions.length + posIndex;
                                 } else {
                                     posIndex -= 1;
                                 }
 
                                 if (uvIndex < 0) {
-
+                                    uvIndex = result.uvs.length + uvIndex;
                                 } else {
                                     uvIndex -= 1;
+                                }
+
+                                if (totalFaces == 2) {
+                                    console.log(posIndex);
                                 }
 
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
                             }
-                        }
-                    } else {
-                        var posIndex = parseInt(face[i]);
-
-                        if (posIndex < 0) {
-                            posIndex += 1;
                         } else {
-                            posIndex -= 1;
+                            if (tempCount < 3) {
+                                console.log("problem");
+                                var posIndex = parseInt(face[i]);
+
+                                if (posIndex < 0) {
+                                    posIndex += 1;
+                                } else {
+                                    posIndex -= 1;
+                                }
+
+                                result.posIndices.push(posIndex);
+                            }
+                            //console.log("problem");
+                            
                         }
 
-                        result.posIndices.push(posIndex);
+                        tempCount++;
                     }
                 }
 
@@ -133,12 +147,9 @@ ObjLoader.loadObj = function (filePath, callback) {
             }
         }
 
-        for (var i in result.materials) {
-            console.log(result.materials[i].id + ", " + result.materials[i].diffuseTextureId + ", " + result.materials[i].startIndex + ", " + result.materials[i].endIndex);
-        }
-
-        console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + totalFaces + "\nMaterialsCount: " + result.materials.length);
-        ObjLoader.loadMtl(result.mtlFileName, result, callback);       
+        console.log("Obj loaded\n Path: " + filePath + "\nTrisCount: " + result.posIndices.length + "\nMaterialsCount: " + result.materials.length);
+        ObjLoader.loadMtl(result.mtlFileName, result, callback);      
+        //callback(result);
         return true;
     });
 };
