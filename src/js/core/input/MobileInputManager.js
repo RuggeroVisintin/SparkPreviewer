@@ -40,7 +40,7 @@ function MobileInputManager(target) {
     var mMouseHorizontalDelta = 0;
     var mMouseVerticalDelta = 0;
 
-    this.update = function () {
+    this.init = function () {
         target.addEventListener('touchstart', handleMouseDown, false);
         target.addEventListener('touchend', handleMouseUp, false);
         target.addEventListener('touchmove', handleMouseMove, false);
