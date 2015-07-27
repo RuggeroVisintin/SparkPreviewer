@@ -40,6 +40,8 @@ function MobileInputManager(target) {
     var mMouseHorizontalDelta = 0;
     var mMouseVerticalDelta = 0;
 
+    var touchesCount = 0;
+
     this.init = function () {
         target.addEventListener('touchstart', handleMouseDown, false);
         target.addEventListener('touchleave', handleMouseUp, false);
@@ -62,11 +64,11 @@ function MobileInputManager(target) {
     };
 
     this.isLeftMouseDown = function () {
-        return mLeftMouseDown;
+        return count == 1;
     };
 
     this.isRightMouseDown = function () {
-        return mRightMouseDown;
+        return count == 2;
     };
 
     this.isWheelMouseDown = function () {
@@ -82,14 +84,16 @@ function MobileInputManager(target) {
     };
 
     var handleMouseDown = function (event) {
-        switch (event.touches.length) {
+        touchesCount++;
+
+        switch (touchesCount) {
             case 1:
                 console.log("singleTouchDown");
                 mLeftMouseDown = true;
                 break;
             case 2:
                 console.log("doubleTouchDown");
-                mRightMouseDown = true;                
+                mRightMouseDown = true;
         }
 
         mMouseX = event.touches[0].pageX;
@@ -99,7 +103,9 @@ function MobileInputManager(target) {
     };
 
     var handleMouseUp = function (event) {
-        switch (event.touches.length) {
+        touchesCount--;
+
+        switch (touchesCount) {
             case 1:
                 console.log("singleTouchUp");
                 mLeftMouseDown = false;
@@ -110,15 +116,10 @@ function MobileInputManager(target) {
         }
     };
 
-    var handleMouseMove = function (event) {
-        if (mLeftMouseDown) {
-            mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.035;
-            mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;
-        } else {
-            mMouseHorizontalDelta = 0;
-            mMouseVerticalDelta = 0;
-        }
-
+    var handleMouseMove = function (event) {       
+        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.035;
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;        
+         
         event.preventDefault();
     };
 
