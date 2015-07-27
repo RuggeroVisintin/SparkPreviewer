@@ -56,7 +56,6 @@ function Renderer() {
         mGfx.enable(mGfx.DEPTH_TEST);
         //mGfx.enable(mGfx.CULL_FACE);
 
-
         mGfx.enableVertexAttribArray(positionsAttribLocation);
         //mGfx.enableVertexAttribArray(normalsAttrbLocation);
         mGfx.enableVertexAttribArray(1);
@@ -68,7 +67,7 @@ function Renderer() {
     };
 
     this.endFrame = function () {
-        mGfx.flush();
+        //mGfx.flush();
     };
 
     this.render = function (deltaTime, drawCall) {
@@ -98,7 +97,7 @@ function Renderer() {
     // initialization 
     this.initWebGL = function (canvas) {
         try {
-            mGfx = canvas.getContext("webgl", { alpha: false, antialias: true}) || canvas.getContext("experimental-webgl");
+            mGfx = canvas.getContext("webgl", { alpha: false, antialias: true }) || canvas.getContext("experimental-webgl", { alpha: false, antialias: true });
         } catch (e) { }
 
         if (!mGfx || mGfx == undefined) {

@@ -97,7 +97,7 @@ function Application(canvas, debugCanvas) {
         "void main(void) {" +
         "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
         "   if(outColor.a < 0.5) { discard; }" +
-        //"   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
+        //" gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
         "}"                                                 	                     ;
 
