@@ -272,9 +272,7 @@ function Application(canvas, debugCanvas) {
 
             mArcballCamera.rotateY(verticalDelta * 0.02);
             mArcballCamera.rotateX(horizontalDelta * 0.02);
-	    }
-
-	    if (inputManager.isRightMouseDown()) {
+	    } else if (inputManager.isRightMouseDown()) {
 	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
 	        var verticalDelta = inputManager.getMouseVerticalDelta();
 
