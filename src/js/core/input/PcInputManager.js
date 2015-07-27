@@ -131,7 +131,7 @@ function PcInputManager(target) {
     };
 
     var handleWheelDelta = function (event) {
-        mWheelDelta = event.deltaY;
+        mWheelDelta = event.deltaY / 120;
         console.log("wheelIsMoving: " + mWheelDelta);
 
         event.preventDefault();

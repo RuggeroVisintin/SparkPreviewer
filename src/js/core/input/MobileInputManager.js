@@ -99,7 +99,7 @@ function MobileInputManager(target) {
         if (touchesCount == 2) {
             mWheelDelta = Math.sqrt(
                 (event.touches[0].x - event.touches[1].x) * (event.touches[0].x - event.touches[1].x) +
-                (event.touches[0].y - event.touches[1].y) * (event.touches[0].y - event.touches[1].y));
+                (event.touches[0].y - event.touches[1].y) * (event.touches[0].y - event.touches[1].y)) * 0.001;
         }
          
         event.preventDefault();

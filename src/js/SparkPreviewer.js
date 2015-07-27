@@ -281,7 +281,7 @@ function Application(canvas, debugCanvas) {
 	    }
 
 	    if (inputManager.getWheelDelta() != 0) {	        
-	        mArcballCamera.moveRadius(-inputManager.getWheelDelta() / 120);
+	        mArcballCamera.moveRadius(-inputManager.getWheelDelta());
 	    }
 
 	    inputManager.postUpdate();
