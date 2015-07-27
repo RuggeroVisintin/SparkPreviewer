@@ -42,7 +42,7 @@ function MobileInputManager(target) {
 
     this.init = function () {
         target.addEventListener('touchstart', handleMouseDown, false);
-        target.addEventListener('touchend', handleMouseUp, false);
+        target.addEventListener('touchleave', handleMouseUp, false);
         target.addEventListener('touchmove', handleMouseMove, false);
         target.addEventListener('gesturechange', handleWheelDelta, false);
     };
