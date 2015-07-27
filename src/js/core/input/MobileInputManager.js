@@ -44,7 +44,7 @@ function MobileInputManager(target) {
 
     this.init = function () {
         target.addEventListener('touchstart', handleMouseDown, false);
-        target.addEventListener('touchleave', handleMouseUp, false);
+        target.addEventListener('touchend', handleMouseUp, false);
         target.addEventListener('touchmove', handleMouseMove, false);
         target.addEventListener('gesturechange', handleWheelDelta, false);
     };
@@ -64,11 +64,11 @@ function MobileInputManager(target) {
     };
 
     this.isLeftMouseDown = function () {
-        return count == 1;
+        return touchesCount == 1;
     };
 
     this.isRightMouseDown = function () {
-        return count == 2;
+        return touchesCount == 2;
     };
 
     this.isWheelMouseDown = function () {
