@@ -32,10 +32,6 @@ function MobileInputManager(target) {
     var mMouseX;
     var mMouseY;
 
-    var mLeftMouseDown;
-    var mRightMouseDown;
-    var mWheelMouseDown;
-
     var mWheelDelta;
     var mMouseHorizontalDelta = 0;
     var mMouseVerticalDelta = 0;
@@ -86,16 +82,6 @@ function MobileInputManager(target) {
     var handleMouseDown = function (event) {
         touchesCount++;
 
-        switch (touchesCount) {
-            case 1:
-                console.log("singleTouchDown");
-                mLeftMouseDown = true;
-                break;
-            case 2:
-                console.log("doubleTouchDown");
-                mRightMouseDown = true;
-        }
-
         mMouseX = event.touches[0].pageX;
         mMouseY = event.touches[0].pageY;
 
@@ -104,21 +90,17 @@ function MobileInputManager(target) {
 
     var handleMouseUp = function (event) {
         touchesCount--;
-
-        switch (touchesCount) {
-            case 1:
-                console.log("singleTouchUp");
-                mLeftMouseDown = false;
-                break;
-            case 2:
-                console.log("doubleTouchUp");
-                mRightMouseDown = false;
-        }
     };
 
     var handleMouseMove = function (event) {       
         mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.035;
-        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;        
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;
+
+        if (touchesCount == 2) {
+            mWheelDelta = Math.sqrt(
+                (event.touches[0].x - event.touches[1].x) * (event.touches[0].x - event.touches[1].x) +
+                (event.touches[0].y - event.touches[1].y) * (event.touches[0].y - event.touches[1].y));
+        }
          
         event.preventDefault();
     };
