@@ -93,8 +93,8 @@ function MobileInputManager(target) {
     };
 
     var handleMouseMove = function (event) {       
-        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.035;
-        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;
+        mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX);
+        mMouseVerticalDelta = (mMouseY - event.touches[0].pageY);
 
         mMouseX = event.touches[0].pageX;
         mMouseY = event.touches[0].pageY;
