@@ -96,6 +96,9 @@ function MobileInputManager(target) {
         mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.035;
         mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.035;
 
+        mMouseX = event.touches[0].pageX;
+        mMouseY = event.touches[0].pageY;
+
         if (touchesCount == 2) {
             /*
             mWheelDelta = Math.sqrt(
