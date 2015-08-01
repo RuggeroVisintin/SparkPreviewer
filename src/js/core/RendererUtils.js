@@ -47,6 +47,28 @@ function initTextureFromImage(image, gfx) {
     return textureHandle;
 }
 
+function initShaderFromFile(vertexShaderFilePath, fragmentShaderFilePath, gfx, callback) {
+    JRV.xmlHttpGetRequest(vertexShaderFilePath, true, function (result) {
+        if (result == null) {
+            return false;
+        }
+
+        var vertShaderString = result;
+
+        JRV.xmlHttpGetRequest(fragmentShaderFilePath, true, function (result) {
+            if (result == null) {
+                return false;
+            }
+
+            var fragShaderString = result;
+
+            var result = initShaderFromString(vertShaderString, fragShaderString, gfx);
+
+            callback(result);
+        });
+    });
+}
+
 function initShaderFromString(vertexShaderString, fragmentShaderString, gfx) {
     var shaderProgramHandle = gfx.createProgram();
     

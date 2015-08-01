@@ -73,35 +73,7 @@ function Application(canvas, debugCanvas) {
 
 	var texture;
 
-    var LIT_VERTEX_SHADER_SOURCE =
-        "attribute vec3 position;" 								                     +
-		"attribute vec3 color;" 								                     +
-        "attribute vec2 uv;" 									                     +
-		"uniform mat4 modelViewProjectionMatrix;" 				                     +
-       "varying vec3 outColor;" +
-       "varying vec2 outUv;" +
-        "void main(void) {" 									                     +
-       "    outColor = position;" +
-       "    outUv = uv;" +
-		"   vec4 pos = modelViewProjectionMatrix * vec4(position, 1.0);"             +
-        "   gl_Position = pos;"       	                                             +
-        "}"                                                 	                     ;
-	
-    var LIT_FRAGMENT_SHADER_SOURCE                          	                     =
-        "precision mediump float;" 								                     +
-        "varying vec3 outColor;" +
-        "varying vec2 outUv;" +
-        "uniform sampler2D sampler;" +
-        "uniform float alpha;" +
-        ""                                                                           +
-        "void main(void) {" +
-        "   vec4 outColor = texture2D(sampler, vec2(outUv.s, outUv.t));" +
-        "   if(outColor.a < 0.5) { discard; }" +
-        //" gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
-        "   gl_FragColor = vec4(outColor.rgb,  outColor.a *  (1.0 - alpha));" +
-        "}"                                                 	                     ;
-
-    this.init = function () {
+	this.init = function () {
         console.log("mobile: " + JRV.isMobile.any());
 
         renderer = new Renderer();
@@ -154,7 +126,9 @@ function Application(canvas, debugCanvas) {
 	};
 	
 	var initShaderPrograms = function () {
-		litShaderProgram = initShaderFromString(LIT_VERTEX_SHADER_SOURCE, LIT_FRAGMENT_SHADER_SOURCE, renderer.getGfx());		
+	    initShaderFromFile("src/glsl/diffuse_lit.vertex", "src/glsl/diffuse_lit.fragment", renderer.getGfx(), function (result) {
+	        litShaderProgram = result;
+	    });
 	};
 	
 	var initDefaultModel = function() {
@@ -213,9 +187,7 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
 	    if (load) {
-	            renderer.startFrame(litShaderProgram);	       
-
-	            renderer.getGfx().disable(renderer.getGfx().BLEND);
+	            renderer.startFrame(litShaderProgram);	
 	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
 
 	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
@@ -238,8 +210,9 @@ function Application(canvas, debugCanvas) {
 	                renderer.render(0, drawCall);
 	            }
 
-	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
 	            renderer.getGfx().enable(renderer.getGfx().BLEND);
+	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
+
 
 	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
 	                var drawCall = new DrawCall();
@@ -261,7 +234,10 @@ function Application(canvas, debugCanvas) {
 	            }
 
 	            renderer.endFrame();
+	            renderer.getGfx().disable(renderer.getGfx().BLEND);
+
             }
+
 	    }
 
 	var updateInput = function()

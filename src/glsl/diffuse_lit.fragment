@@ -1,0 +1,17 @@
+precision mediump 	float;
+
+uniform sampler2D 	sampler;
+uniform float		alpha;
+
+varying vec2 		outUv;
+
+void main(void) 
+{
+	vec4 outColor = texture2D(sampler, vec2(outUv.x, outUv.t));
+	
+	if(outColor.a < 0.35) {
+		discard;
+	}
+	
+	gl_FragColor = outColor;
+}

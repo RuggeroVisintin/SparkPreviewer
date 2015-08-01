@@ -80,7 +80,7 @@ function Renderer() {
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
-		if (drawCall.textureHandle) {
+		if (drawCall.textureHandle) {		    
 		    mGfx.activeTexture(mGfx.TEXTURE0);
 		    mGfx.bindTexture(mGfx.TEXTURE_2D, drawCall.textureHandle);
 		    mGfx.uniform1i(drawCall.textureLocation, 0);
