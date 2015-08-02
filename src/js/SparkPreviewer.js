@@ -50,7 +50,6 @@ JRV.include("core/utils/ShapeGenerator.js");
 function Application(canvas, debugCanvas) {
 	var mCanvas = canvas;
 	var renderer;
-
 	var debugRenderer;
 
 	var inputManager;
@@ -60,9 +59,8 @@ function Application(canvas, debugCanvas) {
 
     var litShaderProgram;
     var normalShaderProgram;
-    var diffuseShaderProgram;
-    var fullShaderProgram;
-	
+    var lightShaderProgram;
+    	
 	var mModelViewMatrix;
 	var mArcballCamera;
 
@@ -126,8 +124,12 @@ function Application(canvas, debugCanvas) {
 	};
 	
 	var initShaderPrograms = function () {
-	    initShaderFromFile("src/glsl/diffuse_lit.vertex", "src/glsl/diffuse_lit.fragment", renderer.getGfx(), function (result) {
+	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/diffuse_lit.fragment", renderer.getGfx(), function (result) {
 	        litShaderProgram = result;
+	    });
+
+	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/normals.fragment", renderer.getGfx(), function (result) {
+	        normalShaderProgram = result;
 	    });
 	};
 	
@@ -186,7 +188,7 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
-	    if (load) {
+	    if (load && litShaderProgram) {
 	            renderer.startFrame(litShaderProgram);	
 	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
 
@@ -210,11 +212,10 @@ function Application(canvas, debugCanvas) {
 	                renderer.render(0, drawCall);
 	            }
 
-	            renderer.getGfx().enable(renderer.getGfx().BLEND);
-	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
+	            //renderer.getGfx().enable(renderer.getGfx().BLEND);
+	            //renderer.getGfx().blendFuncSeparate(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA, renderer.getGfx().ONE, renderer.getGfx().ONE_MINUS_SRC_ALPHA)
 
-
-	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
+                for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
 	                drawCall.shaderProgram = litShaderProgram;
