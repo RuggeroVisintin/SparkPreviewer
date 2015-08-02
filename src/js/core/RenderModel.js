@@ -39,6 +39,11 @@ function RenderModel() {
                 verticesSet.push(result.positions[result.posIndices[i]].x);
                 verticesSet.push(result.positions[result.posIndices[i]].y);
                 verticesSet.push(result.positions[result.posIndices[i]].z);
+
+                verticesSet.push(result.normals[result.norIndices[i]].x);
+                verticesSet.push(result.normals[result.norIndices[i]].y);
+                verticesSet.push(result.normals[result.norIndices[i]].z);
+
                 verticesSet.push(result.uvs[result.uvsIndices[i]].u);
                 verticesSet.push(result.uvs[result.uvsIndices[i]].v);
             }
@@ -77,7 +82,7 @@ function RenderModel() {
                         }
                         
                         // mRenderMaterials.push(tempMat);
-                        console.log(mats[imagesCount].id + ", " + mats[imagesCount].startIndex + ", " + tempMat.getEndIndex());
+                        console.log(result.normals.length);
 
                         imagesCount++;
                         postLoad();

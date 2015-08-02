@@ -40,9 +40,11 @@ ObjLoader.loadObj = function (filePath, callback) {
 
         var result = {
             positions: [],
+            normals: [],
             uvs: [],
 
             posIndices: [],
+            norIndices: [], 
             uvsIndices: [],
 
             mtlFileName: "",
@@ -64,7 +66,18 @@ ObjLoader.loadObj = function (filePath, callback) {
                 });
             } else if (line.substring(0, 2) == "vt") {
                 var vt = line.substring(3).split(" ");
-                result.uvs.push({ u: parseFloat(vt[0]), v: parseFloat(vt[1]) });
+                result.uvs.push({
+                    u: parseFloat(vt[0]),
+                    v: parseFloat(vt[1])
+                });
+
+            } else if (line.substring(0, 2) == "vn") {
+                var vn = line.substring(3).split(" ");
+                result.normals.push({
+                    x: parseFloat(vn[0]),
+                    y: parseFloat(vn[1]),
+                    z: parseFloat(vn[2])
+                });
 
             } else if (line.substring(0, 2) == "f ") {
                 var face = line.substring(2).split(" ");
@@ -81,6 +94,7 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 index = face[i].split("/");
                                 var posIndex = parseInt(index[0]);
                                 var uvIndex = parseInt(index[1]);
+                                var norIndex = parseInt(index[2]);
 
                                 if (posIndex < 0) {
                                     //console.log(result.positions.length + " - " + posIndex + " = " + (result.positions.length + posIndex));
@@ -95,12 +109,15 @@ ObjLoader.loadObj = function (filePath, callback) {
                                     uvIndex -= 1;
                                 }
 
-                                if (totalFaces == 2) {
-                                    console.log(posIndex);
+                                if (norIndex < 0) {
+                                    norIndex = result.normals.length + norIndex;
+                                } else {
+                                    norIndex -= 1;
                                 }
 
                                 result.posIndices.push(posIndex);
                                 result.uvsIndices.push(uvIndex);
+                                result.norIndices.push(norIndex);
                             }
                         } else {
                             if (tempCount < 3) {
@@ -114,9 +131,7 @@ ObjLoader.loadObj = function (filePath, callback) {
                                 }
 
                                 result.posIndices.push(posIndex);
-                            }
-                            //console.log("problem");
-                            
+                            }                           
                         }
 
                         tempCount++;
