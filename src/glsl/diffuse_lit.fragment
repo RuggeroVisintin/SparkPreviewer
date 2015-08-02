@@ -3,15 +3,19 @@ precision mediump 	float;
 uniform sampler2D 	sampler;
 uniform float		alpha;
 
-varying vec2 		outUv;
+varying vec2 		outUvs;
+varying vec3 		outNormals;
+varying vec3 		outPositions;
 
 void main(void) 
 {
-	vec4 outColor = texture2D(sampler, vec2(outUv.x, outUv.t));
+	//gl_FragColor = vec4(outNormals, 1.0);
 	
-	if(outColor.a < 0.35) {
+	vec4 texel = texture2D(sampler, outUvs);
+	
+	if(texel.a < 0.5) {
 		discard;
 	}
 	
-	gl_FragColor = outColor;
+	gl_FragColor = texel;
 }
