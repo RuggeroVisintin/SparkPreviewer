@@ -96,11 +96,8 @@ function MobileInputManager(target) {
         mMouseHorizontalDelta = (mMouseX - event.touches[0].pageX) * 0.5;
         mMouseVerticalDelta = (mMouseY - event.touches[0].pageY) * 0.5;
 
-        mMouseX = event.touches[0].pageX;
-        mMouseY = event.touches[0].pageY;
-
         if (touchesCount == 2) {
-            /*
+            
             mWheelDelta = Math.sqrt(
                 (event.touches[0].x - event.touches[1].x) * (event.touches[0].x - event.touches[1].x) +
                 (event.touches[0].y - event.touches[1].y) * (event.touches[0].y - event.touches[1].y)) * 0.001 - mWheelDelta;
@@ -108,9 +105,12 @@ function MobileInputManager(target) {
             if (mWheelDelta != 0) {
                 mMouseHorizontalDelta = 0;
                 mMouseVerticalDelta = 0;
-            }*/
+            }
         }
          
+        mMouseX = event.touches[0].pageX;
+        mMouseY = event.touches[0].pageY;
+
         event.preventDefault();
     };
 
