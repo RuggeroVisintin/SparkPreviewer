@@ -43,8 +43,8 @@ function Renderer() {
     var mGfx;
 
     var positionsAttribLocation 		= 0;
-    var normalsAttrbLocation 			= 1;
-    var uvsAttribLocation 			    = 2;
+    var normalsAttrbLocation 			= 0;
+    var uvsAttribLocation 			    = 0;
 
     this.getGfx = function() {
         return mGfx;
@@ -56,13 +56,20 @@ function Renderer() {
         mGfx.enable(mGfx.DEPTH_TEST);
         //mGfx.enable(mGfx.CULL_FACE);
 
-        mGfx.enableVertexAttribArray(positionsAttribLocation);
-        //mGfx.enableVertexAttribArray(normalsAttrbLocation);
-        mGfx.enableVertexAttribArray(1);
+
     };
 
     this.startFrame = function (shaderProgram) {
         mGfx.clear(mGfx.COLOR_BUFFER_BIT | mGfx.DEPTH_BUFFER_BIT);
+
+        positionsAttribLocation = mGfx.getAttribLocation(shaderProgram, "positions");
+        normalsAttrbLocation = mGfx.getAttribLocation(shaderProgram, "normals");
+        uvsAttribLocation = mGfx.getAttribLocation(shaderProgram, "uvs");
+
+        mGfx.enableVertexAttribArray(positionsAttribLocation);
+        mGfx.enableVertexAttribArray(normalsAttrbLocation);
+        mGfx.enableVertexAttribArray(uvsAttribLocation);
+
         mGfx.useProgram(shaderProgram);
     };
 
@@ -73,10 +80,10 @@ function Renderer() {
     this.render = function (deltaTime, drawCall) {
 
         mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
-        mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 5, 0);
 
-        mGfx.bindBuffer(mGfx.ARRAY_BUFFER, drawCall.vbo);
-		mGfx.vertexAttribPointer(1, 2, mGfx.FLOAT, false, 4 * 5, 3 * 4);
+        mGfx.vertexAttribPointer(positionsAttribLocation, 3, mGfx.FLOAT, false, 4 * 8, 0);
+        mGfx.vertexAttribPointer(normalsAttrbLocation, 3, mGfx.FLOAT, false, 4 * 8, 4 * 3);
+        mGfx.vertexAttribPointer(uvsAttribLocation, 2, mGfx.FLOAT, false, 4 * 8, 4 * 6);
 
 		mGfx.uniformMatrix4fv(drawCall.mvpLocation, false, drawCall.matrixMVP);
 		
@@ -97,7 +104,7 @@ function Renderer() {
     // initialization 
     this.initWebGL = function (canvas) {
         try {
-            mGfx = canvas.getContext("webgl", { alpha: false, antialias: true }) || canvas.getContext("experimental-webgl", { alpha: false, antialias: true });
+            mGfx = canvas.getContext("webgl", { premultipledAlpha: true, alpha: false, antialias: true }) || canvas.getContext("experimental-webgl", { alpha: false, antialias: true });
         } catch (e) { }
 
         if (!mGfx || mGfx == undefined) {
