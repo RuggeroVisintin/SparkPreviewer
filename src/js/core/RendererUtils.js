@@ -61,6 +61,8 @@ function initShaderFromFile(vertexShaderFilePath, fragmentShaderFilePath, gfx, c
             }
 
             var fragShaderString = result;
+            console.log(fragShaderString);
+
             var result = initShaderFromString(vertShaderString, fragShaderString, gfx);
 
             callback(result);

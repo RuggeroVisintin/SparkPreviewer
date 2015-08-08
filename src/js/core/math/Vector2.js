@@ -75,7 +75,7 @@ Vector2.multiply = function(a, b, out) {
 	return out;
 };
 
-Vector2.divice = function(a, b, out) {
+Vector2.divide = function(a, b, out) {
 	out[0] = a[0] / b[0];
 	out[1] = a[1] / b[1];
 	

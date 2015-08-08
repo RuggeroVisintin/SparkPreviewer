@@ -60,6 +60,8 @@ function Application(canvas, debugCanvas) {
     var litShaderProgram;
     var normalShaderProgram;
     var lightShaderProgram;
+
+    var mCurrentShaderProgram;
     	
 	var mModelViewMatrix;
 	var mArcballCamera;
@@ -126,11 +128,17 @@ function Application(canvas, debugCanvas) {
 	var initShaderPrograms = function () {
 	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/diffuse_lit.fragment", renderer.getGfx(), function (result) {
 	        litShaderProgram = result;
+	        mCurrentShaderProgram = litShaderProgram;
+	    });
+
+	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/diffuse_lit_hair.fragment", renderer.getGfx(), function (result) {
+	        lightShaderProgram = result;
 	    });
 
 	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/normals.fragment", renderer.getGfx(), function (result) {
 	        normalShaderProgram = result;
 	    });
+
 	};
 	
 	var initDefaultModel = function() {
@@ -178,7 +186,17 @@ function Application(canvas, debugCanvas) {
 	window.onresize = function () {
 	    console.log("Resizing");
 	    mArcballCamera.setViewport(45, mCanvas.clientWidth / mCanvas.clientHeight);
-   	};
+	};
+    
+	window.onkeydown = function (event) {
+	    console.log("pressed: " + event.keyCode);
+
+	    if (event.keyCode == 49) {
+	        mCurrentShaderProgram = litShaderProgram;
+	    } else if (event.keyCode == 50) {
+	        mCurrentShaderProgram = normalShaderProgram;
+	    }
+	}
 
 	var updateRendering = function() 
 	{
@@ -188,24 +206,27 @@ function Application(canvas, debugCanvas) {
 	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
 	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
 
-	    if (load && litShaderProgram) {
-	            renderer.startFrame(litShaderProgram);	
-	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
+	    if (load && mCurrentShaderProgram) {
+            mCurrentShaderProgram = litShaderProgram;
+            renderer.startFrame(mCurrentShaderProgram);
+
+            renderer.getGfx().depthMask(true);
+	        renderer.getGfx().depthFunc(renderer.getGfx().LESS);
 
 	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
 
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	                drawCall.shaderProgram = litShaderProgram;
+	                drawCall.shaderProgram = mCurrentShaderProgram;
 
 	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()) * 3;
 	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()) * 3;
 	                drawCall.matrixMVP = mvp;
 
-	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
 	                drawCall.textureHandle = renderModel.getOpaqueMaterials()[i].getDiffuseTextureHandle();
-	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
-	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
 	                
 	                drawCall.opacity = renderModel.getOpaqueMaterials()[i].getOpacity();
 
@@ -218,25 +239,55 @@ function Application(canvas, debugCanvas) {
                 for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
 	                var drawCall = new DrawCall();
 	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	                drawCall.shaderProgram = litShaderProgram;
+	                drawCall.shaderProgram = mCurrentShaderProgram;
 
 	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
 	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
 	                drawCall.matrixMVP = mvp;
 
-	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
 	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
-	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
-	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
 
 	                drawCall.opacity = renderModel.getTransparentMaterials()[i].getOpacity();
 	               
 	                renderer.render(0, drawCall);
 	            }
 
+	            //renderer.endFrame();
+	            //renderer.getGfx().disable(renderer.getGfx().BLEND);
+
+	            mCurrentShaderProgram = lightShaderProgram;
+	            renderer.getGfx().useProgram(mCurrentShaderProgram);
+
+	            renderer.getGfx().depthMask(false);
+
+	            renderer.getGfx().enable(renderer.getGfx().BLEND);
+	            renderer.getGfx().blendFunc(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA);
+
+	            for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
+	                var drawCall = new DrawCall();
+	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
+	                drawCall.shaderProgram = mCurrentShaderProgram;
+
+	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
+	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
+	                drawCall.matrixMVP = mvp;
+
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
+
+	                drawCall.opacity = renderModel.getTransparentMaterials()[i].getOpacity();
+
+	                renderer.render(0, drawCall);
+	            }
+
 	            renderer.endFrame();
 	            renderer.getGfx().disable(renderer.getGfx().BLEND);
-
+	          
             }
 
 	    }
@@ -270,7 +321,6 @@ function Application(canvas, debugCanvas) {
 var APPLICATION;
 
 function SparkPreviewerMain() {
-
     window.onload = function () {
         var debugCanvas = document.getElementById("sparkViewer").cloneNode();
 
