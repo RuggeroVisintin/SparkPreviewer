@@ -20,10 +20,10 @@ void main(void)
 	if(diffuseFactor > 0.0) {
 		diffuseColor = vec4(lightColor * diffuseFactor, 1.0);
 	} else {
-		diffuseColor = vec4(0, 0, 0, 0);
+		diffuseColor = vec4(0.1, 0.1, 0.1, 0);
 	}
 	
 	if(texel.a < 1.0) discard;
 	
-	gl_FragColor = texel * diffuseColor + vec4(0.1);
+	gl_FragColor = texel * diffuseColor;
 }
