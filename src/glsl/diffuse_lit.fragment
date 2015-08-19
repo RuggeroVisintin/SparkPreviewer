@@ -16,7 +16,7 @@ void main(void)
 	vec4 texel = texture2D(sampler, outUvs);
 	float diffuseFactor = dot(normalize(outNormals), -lightDirection);
 	
-	vec4 diffuseColor = max(0.0, diffuseFactor);
+	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
 	
 	if(texel.a < 1.0) discard;
 	
