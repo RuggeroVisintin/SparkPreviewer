@@ -14,16 +14,9 @@ void main(void)
 {
 	vec4 texel = texture2D(sampler, outUvs);
 	float diffuseFactor = dot(normalize(outNormals), -lightDirection);
-
-	vec4 diffuseColor;
 	
-	if(diffuseFactor > 0.0) {
-		diffuseColor = vec4(lightColor * diffuseFactor, 1.0);
-	} else {
-		diffuseColor = vec4(0, 0, 0, 1.0);
-	}
-	
+	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
 	if(texel.a >= 1.0) discard;
 
-	gl_FragColor = texel * diffuseColor;
+	gl_FragColor = texel * (diffuseColor + vec4(0.05, 0.05, 0.05, 0.05));
 }
