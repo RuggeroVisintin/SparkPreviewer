@@ -144,7 +144,7 @@ function Application(canvas, debugCanvas) {
 	var initDefaultModel = function() {
 	    renderModel = new RenderModel();
 	    //renderModel.loadFromObj("Edward_Kenway/Edward_Kenway.obj", renderer.getGfx(), function () {
-	    renderModel.loadFromObj("modello_prova/Lara_croft.obj", renderer.getGfx(), function () {
+	    renderModel.loadFromObj("modello_prova/Lara_Croft.obj", renderer.getGfx(), function () {
 	        var vbo = renderer.getGfx().createBuffer();
 
 	        renderer.getGfx().bindBuffer(renderer.getGfx().ARRAY_BUFFER, vbo);
