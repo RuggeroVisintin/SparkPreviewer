@@ -25,5 +25,5 @@ void main(void)
 	
 	if(texel.a >= 1.0) discard;
 
-	gl_FragColor = texel * lightColor;
+	gl_FragColor = texel * diffuseColor;
 }
