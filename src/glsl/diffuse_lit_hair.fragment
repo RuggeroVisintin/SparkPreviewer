@@ -18,5 +18,5 @@ void main(void)
 	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
 	if(texel.a >= 1.0) discard;
 
-	gl_FragColor = texel * (diffuseColor);
+	gl_FragColor = texel;
 }
