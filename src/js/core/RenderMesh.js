@@ -22,6 +22,15 @@
 
 console.log("RenderMesh.js included");
 
+function MeshVertex() 
+{
+    this.position;   // Vec3
+    this.normal;     // Vec3
+    this.texCoord;   // Vec2
+    
+    return this;
+}
+
 function RenderMesh() {
     var mVertexBufferHandle;  
     var mVerticesSet;
