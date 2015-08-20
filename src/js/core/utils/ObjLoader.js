@@ -22,7 +22,7 @@
 
 var ObjLoader = {};
 
-/*
+/**
 * @param filePath - the file path of the .obj model
 * @param callback - the function to call when the model is loaded, 
 *                   the result of the loading is passed to the callback
