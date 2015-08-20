@@ -44,8 +44,7 @@ function ArcballCamera() {
     this.rotateX = function (deltaRads) {
         mTheta += deltaRads;
     };
-
-    // i'll keep it locked till i'll solve matrices multiplication error
+    
     this.rotateY = function (deltaRads) {
         if (deltaRads > 0) {
             if (((mPhi + (deltaRads)) * 180 / Math.PI) < 170) {
