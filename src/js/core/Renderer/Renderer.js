@@ -22,7 +22,8 @@
 
 function Renderer(glContext) 
 {
-  
+  // not implemented yet
+  throw "Not implemented";
 }
 
 Renderer.prototype.clear = function()
