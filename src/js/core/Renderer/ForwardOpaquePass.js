@@ -1,5 +1,8 @@
 function ForwardOpaquePass() 
 {
+  // not implemented yet
+  throw "Not implemented";
+  
   var mOpaqueInstances  = [];
   var mLightInstances   = [];
   
