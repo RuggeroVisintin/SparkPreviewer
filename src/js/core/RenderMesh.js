@@ -24,6 +24,9 @@ console.log("RenderMesh.js included");
 
 function MeshVertex() 
 {
+    // not implemented yet
+    throw "Not implemented";
+    
     this.position;   // Vec3
     this.normal;     // Vec3
     this.texCoord;   // Vec2
