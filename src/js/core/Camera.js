@@ -40,6 +40,10 @@ function ArcballCamera() {
     var mViewMatrix = Matrix4.create();
 
     Matrix4.perspective(70, 800 / 600, 0.1, 1000, mProjectionMatrix);
+    console.log("perspective: " mProjectionMatrix[0] + "," +  mProjectionMatrix[1] + "," +  mProjectionMatrix[2] + "," + mProjectionMatrix[3] + ";\n"
+                + mProjectionMatrix[4] + "," +  mProjectionMatrix[5] + "," +  mProjectionMatrix[6] + "," + mProjectionMatrix[7] + ";\n"
+                + mProjectionMatrix[8] + "," +  mProjectionMatrix[9] + "," +  mProjectionMatrix[10] + "," + mProjectionMatrix[11] + ";\n"
+                + mProjectionMatrix[12] + "," +  mProjectionMatrix[13] + "," +  mProjectionMatrix[14] + "," + mProjectionMatrix[15] + ";\n")
 
     this.rotateX = function (deltaRads) {
         mTheta += deltaRads;
