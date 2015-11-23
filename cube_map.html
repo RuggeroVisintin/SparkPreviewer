@@ -60,9 +60,15 @@
         gl = canvas.getContext("webgl", { premultipledAlpha: true, alpha: false, antialias: true }) || canvas.getContext("experimental-webgl", { alpha: false, antialias: true });
       } catch (e) { }
       
-      gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-      gl.clearColor(0.0, 0.0, 0.0, 0.0);
-      gl.enable(gl.DEPTH_TEST);
+
+      
+      function loop() {
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        gl.clearColor(1.0, 0.0, 0.0, 0.0);
+        gl.enable(gl.DEPTH_TEST);
+        
+        window.requestAnimationFrame(loop);
+      }
       
     </script>
   </body>
