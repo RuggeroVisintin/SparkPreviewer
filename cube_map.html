@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title> EnvirormentMapExample </title>  
+    <script src="src/js/core/utils/JRV/JRV.js">          
+    </script>
+  </head>
+  <body>
+    <canvas id = "sparkViewer" width = "800" height = "600" onclick="" style = "width: 100%; height: 100%;">
+      You have to update your broswer to use the SparkViewer viewer
+    </canvas>
+    <script>
+      var cube = [
+      -10.0,  10.0, -10.0,
+      -10.0, -10.0, -10.0,
+       10.0, -10.0, -10.0,
+       10.0, -10.0, -10.0,
+       10.0,  10.0, -10.0,
+      -10.0,  10.0, -10.0,
+      
+      -10.0, -10.0,  10.0,
+      -10.0, -10.0, -10.0,
+      -10.0,  10.0, -10.0,
+      -10.0,  10.0, -10.0,
+      -10.0,  10.0,  10.0,
+      -10.0, -10.0,  10.0,
+      
+       10.0, -10.0, -10.0,
+       10.0, -10.0,  10.0,
+       10.0,  10.0,  10.0,
+       10.0,  10.0,  10.0,
+       10.0,  10.0, -10.0,
+       10.0, -10.0, -10.0,
+       
+      -10.0, -10.0,  10.0,
+      -10.0,  10.0,  10.0,
+       10.0,  10.0,  10.0,
+       10.0,  10.0,  10.0,
+       10.0, -10.0,  10.0,
+      -10.0, -10.0,  10.0,
+      
+      -10.0,  10.0, -10.0,
+       10.0,  10.0, -10.0,
+       10.0,  10.0,  10.0,
+       10.0,  10.0,  10.0,
+      -10.0,  10.0,  10.0,
+      -10.0,  10.0, -10.0,
+      
+      -10.0, -10.0, -10.0,
+      -10.0, -10.0,  10.0,
+       10.0, -10.0, -10.0,
+       10.0, -10.0, -10.0,
+      -10.0, -10.0,  10.0,
+       10.0, -10.0,  10.0
+      ];
+      
+      var gl;
+      var canvas = document.getElementById("sparkViewer");
+      
+      try {
+        gl = canvas.getContext("webgl", { premultipledAlpha: true, alpha: false, antialias: true }) || canvas.getContext("experimental-webgl", { alpha: false, antialias: true });
+      } catch (e) { }
+      
+    </script>
+  </body>
+</html>
