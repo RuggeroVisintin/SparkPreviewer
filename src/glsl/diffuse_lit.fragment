@@ -39,10 +39,12 @@ vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
     // do the lighting calculation for each fragment.
     float NdotL = max(dot(normal, lightDirection), 0.0);
     
+    vec3 realEye = vec3(0.0, 0.0, 0.0);
+    
     float specular = 0.0;
     if(NdotL > 0.0)
     {
-        vec3 eyeDir = normalize(vec3(0.0, 0.0, 0.0));
+        vec3 eyeDir = normalize(realEye);
 
         // calculate intermediary values
         vec3 halfVector = normalize(lightDirection + eyeDir);
