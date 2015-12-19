@@ -16,9 +16,9 @@ vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 	float diffuseFactor;
 
 	if(gl_FrontFacing) {
-		diffuseFactor = dot(normalize(normals), -lightDirection);
+		diffuseFactor = dot(normalize(normals), lightDirection);
 	} else {
-		diffuseFactor = dot(-normalize(normals), -lightDirection);
+		diffuseFactor = dot(-normalize(normals), lightDirection);
 	}
 	
 	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
