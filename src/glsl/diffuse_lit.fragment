@@ -95,6 +95,6 @@ void main(void)
 	
 	if(texel.a < 1.0) discard;
 	
-	gl_FragColor = texel * (cook);
+	gl_FragColor = texel * (cook + ambientColor);
 }
 
