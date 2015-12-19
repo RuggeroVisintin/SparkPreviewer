@@ -29,7 +29,7 @@ vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
 {
 	// set important material values
-    float roughnessValue = 0.3; // 0 : smooth, 1: rough
+    float roughnessValue = 0.9; // 0 : smooth, 1: rough
     float F0 = 0.8; // fresnel reflectance at normal incidence
     float k = 0.2; // fraction of diffuse reflection (specular reflection = 1 - k)
     
