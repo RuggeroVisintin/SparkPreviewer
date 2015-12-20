@@ -31,7 +31,7 @@ vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
 	// set important material values
     float roughnessValue = 0.9; // 0 : smooth, 1: rough
     float F0 = 1.0; // fresnel reflectance at normal incidence
-    float k = 0.9; // fraction of diffuse reflection (specular reflection = 1 - k)
+    float k = 0.2; // fraction of diffuse reflection (specular reflection = 1 - k)
     
     // interpolating normals will change the length of the normal, so renormalize the normal.
     vec3 normal = normalize(normals);
