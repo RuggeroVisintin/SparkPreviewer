@@ -74,8 +74,8 @@ vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
         specular = (fresnel * geoAtt * roughness) / (NdotV * NdotL * 3.14);
     }
     
-    vec3 finalValue = lightColor * NdotL * (specular);
-    //vec3 finalValue = lightColor * NdotL * (k + specular * (1.0 - k));
+    //vec3 finalValue = lightColor * NdotL * (specular);
+    vec3 finalValue = lightColor * NdotL * (k + specular * (1.0 - k));
     return vec4(finalValue, 1.0);
 }
 
