@@ -99,13 +99,13 @@ void main(void)
 	//
 	//vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
 	
-	//vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
-	vec4 cook = cookTorrance(lightDirection, lightColor, outNormals);
-	float lambert = lambert(outNormals, lightDirection);
+	vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
+	//vec4 cook = cookTorrance(lightDirection, lightColor, outNormals);
+	//float lambert = lambert(outNormals, lightDirection);
 	
 	if(texel.a < 1.0) discard;
 	
-	vec4 diffuseColor = lambert * vec4(lightColor, 1.0);
-	gl_FragColor = texel * diffuseColor;
+	//vec4 diffuseColor = lambert * vec4(lightColor, 1.0);
+	gl_FragColor = texel * phong;
 }
 
