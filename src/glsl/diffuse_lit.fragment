@@ -28,10 +28,10 @@ vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 
 vec3			lambert(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 {
-			vec3 L = normalize(lightDirection);
+			vec3 L = lightDirection;
 			vec3 N = normalize(normals);
 			
-			float LdotN = max(0.0, dot(L, N));
+			float LdotN = max(0.0, dot(N, L));
 			
 			vec3 finalValue =  lightColor * LdotN;
 			return finalValue;
