@@ -101,10 +101,10 @@ void main(void)
 	
 	//vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
 	vec4 cook = cookTorrance(lightDirection, lightColor, outNormals);
-	vec3 lambert = lambert(outNormals, lightDirection, lightColor);
+	float lambert = lambert(outNormals, lightDirection, lightColor);
 	
 	if(texel.a < 1.0) discard;
 	
-	gl_FragColor = texel * (vec4(lambert, 1.0));
+	gl_FragColor = texel * (vec4(lightColor * lambert, 1.0));
 }
 
