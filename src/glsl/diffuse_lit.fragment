@@ -26,10 +26,12 @@ vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 	return diffuseColor;
 }
 
-vec3			lambert(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
+float			lambert(in vec3 normals, in vec3 lightDirection)
 {
 			vec3 N = normalize(normals);
 			float NdotL = max(dot(N, lightDirection), 0.0);
+			
+			return NdotL;
 }
 
 vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
