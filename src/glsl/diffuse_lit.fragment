@@ -101,7 +101,7 @@ void main(void)
 	
 	//vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
 	vec4 cook = cookTorrance(lightDirection, lightColor, outNormals);
-	float lambert = lambert(outNormals, lightDirection, lightColor);
+	float lambert = lambert(outNormals, lightDirection);
 	
 	if(texel.a < 1.0) discard;
 	
