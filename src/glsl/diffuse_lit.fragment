@@ -32,7 +32,7 @@ vec3			lambert(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 			vec3 LdotN = dot(L, normals);
 			
 			vec3 finalValue =  lightColor * LdotN;
-			return fianlValue;
+			return finalValue;
 			// 3.1415926535897932384626433832795;
 }
 
