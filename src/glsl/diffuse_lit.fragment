@@ -106,6 +106,6 @@ void main(void)
 	if(texel.a < 1.0) discard;
 	
 	vec4 diffuseColor = lambert * vec4(lightColor, 1.0);
-	gl_FragColor = texel * diffuseFactor;
+	gl_FragColor = texel * diffuseColor;
 }
 
