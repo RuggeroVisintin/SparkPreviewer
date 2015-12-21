@@ -26,6 +26,15 @@ vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
 	return diffuseColor;
 }
 
+vec3			lambert(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
+{
+			vec3 L = normalize(lightDirection);
+			vec3 LdotN = dot(L, normals);
+			
+			return LdotN * lightColor;
+			// 3.1415926535897932384626433832795;
+}
+
 vec4			cookTorrance(in vec3 lightDirection, in vec3 lightColor, in vec3 normals)
 {
 	// set important material values
@@ -93,9 +102,10 @@ void main(void)
 	
 	//vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
 	vec4 cook = cookTorrance(lightDirection, lightColor, outNormals);
+	vec3 lambert = lambert(outNormals, lightDirection, lightColor);
 	
 	if(texel.a < 1.0) discard;
 	
-	gl_FragColor = texel * (cook + ambientColor);
+	gl_FragColor = texel * (vec4(lambert, 1.0));
 }
 
