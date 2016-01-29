@@ -60,6 +60,8 @@ function Application(canvas, debugCanvas) {
     var litShaderProgram;
     var normalShaderProgram;
     var lightShaderProgram;
+    
+    var mRotate = false;
 
     var mCurrentShaderProgram;
     	
@@ -195,11 +197,17 @@ function Application(canvas, debugCanvas) {
 	        mCurrentShaderProgram = litShaderProgram;
 	    } else if (event.keyCode == 50) {
 	        mCurrentShaderProgram = normalShaderProgram;
+	    } else {
+	    	mRotate = !mRotate;
 	    }
 	}
 
 	var updateRendering = function() 
 	{
+	    if (mRotate) {
+	    	Matrix4.rotateX(mModelViewMatrix, 0.1, mModelViewMatrix);
+	    }
+		
 	    var mvp = Matrix4.create();
 	    var camMatrices = mArcballCamera.updateMatrices();
 
