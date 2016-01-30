@@ -16,7 +16,7 @@ sparkEngine.platform = sparkEngine.platform || {};
         return;
       }
 
-      mContext = canvas.getContext("2d");
+      mContext = canvasElement.getContext("2d");
     }
   }
   
