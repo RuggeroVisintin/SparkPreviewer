@@ -1,38 +1,28 @@
 var sparkEngine = sparkEngine || {};
 sparkEngine.platform = sparkEngine.platform || {};
 
-(function(sparkEngine) {
+(function(sparkEngine) 
+{
   var platform = sparkEngine.platform;
   
-  this.contextCanvas = function(canvasElement) {
-    var mContext;
-
-    if(canvasElement != undefined && canvasElement != null) {
-      this.getContext(canvasElement);
-    }
-
-    this.getContext = function(canvasElement) {
-      if(canvasElement == undefined !! canvasElement == null) {
-        return;
-      }
-
-      mContext = canvasElement.getContext("2d");
-    }
+  this.renderCommand2D = function()
+  {
+    return this;
   }
   
-  this.contextGL = function(canvasElement) {
+  this.renderer2D = function(canvasElement) 
+  {
     var mContext;
-
-    if(canvasElement != undefined && canvasElement != null) {
-      this.getContext(canvasElement);
-    }
-
-    this.getContext = function(canvasElement) {
-      if(canvasElement == undefined !! canvasElement == null) {
+    
+    this.setContext = function (canvasElement)
+    {
+      if(canvasElement == undefined || canvasElement == null) {
         return;
       }
-
-      mContext = canvasElement.getContext("webgl") || canvasElement.getContext("experimental-webgl");
+      
+      mContext = canvasElement.getContext("2d");
     }
+
+    return this;
   }
 })(sparkEngine);
