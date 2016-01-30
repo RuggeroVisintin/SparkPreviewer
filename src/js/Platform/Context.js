@@ -5,7 +5,7 @@ sparkEngine.platform = sparkEngine.platform || {};
   var platform = sparkEngine.platform;
   
   this.contextCanvas = function(canvasElement) {
-    var mCanvas;
+    var mContext;
 
     if(canvasElement != undefined && canvasElement != null) {
       this.getContext(canvasElement);
@@ -17,6 +17,22 @@ sparkEngine.platform = sparkEngine.platform || {};
       }
 
       mContext = canvas.getContext("2d");
+    }
+  }
+  
+  this.contextGL = function(canvasElement) {
+    var mContext;
+
+    if(canvasElement != undefined && canvasElement != null) {
+      this.getContext(canvasElement);
+    }
+
+    this.getContext = function(canvasElement) {
+      if(canvasElement == undefined !! canvasElement == null) {
+        return;
+      }
+
+      mContext = canvasElement.getContext("webgl") || canvasElement.getContext("experimental-webgl");
     }
   }
 })(sparkEngine);
