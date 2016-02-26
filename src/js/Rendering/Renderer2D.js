@@ -7,8 +7,9 @@ se.rendering.native = se.rendering.native || {};
 	
 	rendering.Renderer2D = function(canvasElement)
 	{
-		var mContext	= null;	
-		var mCommands 	= [];
+		var mContext		= null;	
+		var mCommandBuffer 	= [];
+		var mSwapBuffer		= [];
 		
 		if(canvasElement == undefined || canvasElement == null) {
 			return;
@@ -19,6 +20,11 @@ se.rendering.native = se.rendering.native || {};
 		this.pushCommand = function(renderCommand) 
 		{			
 			console.log("pushing command");
+		}
+		
+		this.swapBuffers = function()
+		{
+			console.log("swapping buffers");
 		}
 		
 		return this;
