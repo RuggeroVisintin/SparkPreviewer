@@ -9,8 +9,7 @@ se.rendering.native = se.rendering.native || {};
 	{
 		var mContext		= null;	
 		var mCommandBuffer 	= [];
-		var mSwapBuffer		= [];
-		
+
 		if(canvasElement == undefined || canvasElement == null) {
 			return;
 		}	
@@ -22,9 +21,9 @@ se.rendering.native = se.rendering.native || {};
 			console.log("pushing command");
 		}
 		
-		this.swapBuffers = function()
+		this.submitBuffer = function()
 		{
-			console.log("swapping buffers");
+			console.log("submitting buffer");
 		}
 		
 		return this;
