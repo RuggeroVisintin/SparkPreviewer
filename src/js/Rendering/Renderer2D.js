@@ -1,8 +1,9 @@
 var se = se || {};
 se.rendering = se.rendering || {};
+se.rendering.native = se.rendering.native || {};
 
 (function(sparkengine) {
-	var rendering = se.rendering;
+	var rendering = se.rendering.native;
 	
 	rendering.Renderer2D = function(canvasElement)
 	{
@@ -21,6 +22,6 @@ se.rendering = se.rendering || {};
 		}
 		
 		return this;
-	}
+	};
 	
 })(sparkengine);
