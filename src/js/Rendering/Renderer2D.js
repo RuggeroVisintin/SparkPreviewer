@@ -17,7 +17,11 @@ se.rendering.native = se.rendering.native || {};
 		mContext = canvasElement.getContext("2d");
 		
 		this.pushCommand = function(renderCommand) 
-		{			
+		{		
+			if(renderCommand == undefined || renderCommand == null) {
+				console.error("null param passed");
+			}
+			
 			console.log("pushing command");
 		}
 		
