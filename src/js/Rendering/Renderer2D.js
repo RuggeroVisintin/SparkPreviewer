@@ -2,7 +2,7 @@ var se = se || {};
 se.rendering = se.rendering || {};
 se.rendering.native = se.rendering.native || {};
 
-(function(sparkengine) {
+(function(se) {
 	var rendering = se.rendering.native;
 	
 	rendering.Renderer2D = function(canvasElement)
@@ -24,4 +24,4 @@ se.rendering.native = se.rendering.native || {};
 		return this;
 	};
 	
-})(sparkengine);
+})(se);
