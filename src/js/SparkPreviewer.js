@@ -239,32 +239,7 @@ function Application(canvas, debugCanvas) {
 
 	                renderer.render(0, drawCall);
 	            }
-
-	            //renderer.getGfx().enable(renderer.getGfx().BLEND);
-	            //renderer.getGfx().blendFuncSeparate(renderer.getGfx().SRC_ALPHA, renderer.getGfx().ONE_MINUS_SRC_ALPHA, renderer.getGfx().ONE, renderer.getGfx().ONE_MINUS_SRC_ALPHA)
-
-                for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
-	                var drawCall = new DrawCall();
-	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
-	                drawCall.shaderProgram = mCurrentShaderProgram;
-
-	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
-	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
-	                drawCall.matrixMVP = mvp;
-
-	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
-	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
-	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
-	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
-
-	                drawCall.opacity = renderModel.getTransparentMaterials()[i].getOpacity();
-	               
-	                renderer.render(0, drawCall);
-	            }
-
-	            //renderer.endFrame();
-	            //renderer.getGfx().disable(renderer.getGfx().BLEND);
-
+	            
 	            renderer.getGfx().useProgram(lightShaderProgram);
 
 	            renderer.getGfx().depthMask(false);
