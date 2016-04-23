@@ -210,34 +210,34 @@ function Application(canvas, debugCanvas) {
   	    Matrix4.multiply(camMatrices[0], camMatrices[1], mvp);
   	    Matrix4.multiply(mvp, mModelViewMatrix, mvp);
   
- -	    if (load && litShaderProgram) {
- -	            renderer.startFrame(litShaderProgram);	
- -	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
- +	    if (load && mCurrentShaderProgram) {
- +            mCurrentShaderProgram = litShaderProgram;
- +            renderer.startFrame(mCurrentShaderProgram);
- +
- +            renderer.getGfx().depthMask(true);
- +	        renderer.getGfx().depthFunc(renderer.getGfx().LESS);
+	    if (load && litShaderProgram) {
+	            renderer.startFrame(litShaderProgram);	
+	            renderer.getGfx().depthFunc(renderer.getGfx().LESS);
+	    if (load && mCurrentShaderProgram) {
+            mCurrentShaderProgram = litShaderProgram;
+            renderer.startFrame(mCurrentShaderProgram);
+
+            renderer.getGfx().depthMask(true);
+	        renderer.getGfx().depthFunc(renderer.getGfx().LESS);
   
   	            for (var i = 0; i < renderModel.getOpaqueMaterials().length; i++) {
   
   	                var drawCall = new DrawCall();
   	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
- -	                drawCall.shaderProgram = litShaderProgram;
- +	                drawCall.shaderProgram = mCurrentShaderProgram;
-  
-  	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()) * 3;
-  	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()) * 3;
-  	                drawCall.matrixMVP = mvp;
-  
- -	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
- +	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
-  	                drawCall.textureHandle = renderModel.getOpaqueMaterials()[i].getDiffuseTextureHandle();
- -	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
- -	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
- +	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
- +	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
+	                drawCall.shaderProgram = litShaderProgram;
+	                drawCall.shaderProgram = mCurrentShaderProgram;
+
+	                drawCall.verticesNumber = (renderModel.getOpaqueMaterials()[i].getEndIndex()) * 3;
+	                drawCall.verticesStart = (renderModel.getOpaqueMaterials()[i].getStartIndex()) * 3;
+	                drawCall.matrixMVP = mvp;
+
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.textureHandle = renderModel.getOpaqueMaterials()[i].getDiffuseTextureHandle();
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
   	                
   	                drawCall.opacity = renderModel.getOpaqueMaterials()[i].getOpacity();
   
@@ -250,20 +250,20 @@ function Application(canvas, debugCanvas) {
                   for (var i = 0; i < renderModel.getTransparentMaterials().length; i++) {
   	                var drawCall = new DrawCall();
   	                drawCall.vbo = renderModel.getRenderMesh().getVertexBufferHandle();
- -	                drawCall.shaderProgram = litShaderProgram;
- +	                drawCall.shaderProgram = mCurrentShaderProgram;
-  
-  	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
-  	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
-  	                drawCall.matrixMVP = mvp;
-  
- -	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
- +	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
-  	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
- -	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
- -	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
- +	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
- +	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
+	                drawCall.shaderProgram = litShaderProgram;
+	                drawCall.shaderProgram = mCurrentShaderProgram;
+
+	                drawCall.verticesNumber = renderModel.getTransparentMaterials()[i].getEndIndex() * 3;
+	                drawCall.verticesStart = renderModel.getTransparentMaterials()[i].getStartIndex() * 3;
+	                drawCall.matrixMVP = mvp;
+
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.mvpLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "modelViewProjectionMatrix");
+	                drawCall.textureHandle = renderModel.getTransparentMaterials()[i].getDiffuseTextureHandle();
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(litShaderProgram, "alpha");
+	                drawCall.textureLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "sampler");
+	                drawCall.alphaLocation = renderer.getGfx().getUniformLocation(mCurrentShaderProgram, "alpha");
   
   	                drawCall.opacity = renderModel.getTransparentMaterials()[i].getOpacity();
   	               
