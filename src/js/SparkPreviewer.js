@@ -273,29 +273,8 @@ function Application(canvas, debugCanvas) {
   	            renderer.endFrame();
   	            renderer.getGfx().disable(renderer.getGfx().BLEND);
  	          
-              }
-  
-  	    }
-
-             mArcballCamera.rotateY(verticalDelta * 0.02);
-             mArcballCamera.rotateX(horizontalDelta * 0.02);
- 	    } else if (inputManager.isRightMouseDown()) {
- 	        var horizontalDelta = inputManager.getMouseHorizontalDelta();
- 	        var verticalDelta = inputManager.getMouseVerticalDelta();
- 
- 	        mArcballCamera.translateX(horizontalDelta * 0.05);
- 	        mArcballCamera.translateY(-verticalDelta * 0.05);
- 	    }
- 
- 	    if (inputManager.getWheelDelta() != 0) {	        
- 	        mArcballCamera.moveRadius(-inputManager.getWheelDelta());
- 	    }
- 
- 	    inputManager.postUpdate();
- 	}
- 
- 	return this;
- }
+            	}
+	}
 
 	var updateInput = function()
 	{
