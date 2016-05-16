@@ -17,9 +17,9 @@ void main(void)
 	float diffuseFactor;
 	
 	if(gl_FrontFacing) {
-		diffuseFactor = dot(normalize(outNormals), lightDirection);
-	} else {
 		diffuseFactor = dot(-normalize(outNormals), lightDirection);
+	} else {
+		diffuseFactor = dot(normalize(outNormals), lightDirection);
 	}
 	
 	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
