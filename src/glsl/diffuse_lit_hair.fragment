@@ -19,10 +19,10 @@ void main(void)
 	if(gl_FrontFacing) {
 		diffuseFactor = dot(normalize(outNormals), lightDirection);
 	} else {
-		diffuseFactor = dot(normalize(outNormals), lightDirection);
+		diffuseFactor = dot(-normalize(outNormals), lightDirection);
 	}
 	
-	vec4 diffuseColor = max(0.0, -diffuseFactor) * vec4(lightColor, 1.0);
+	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
 	if(texel.a >= 1.0) discard;
 
 	gl_FragColor = texel * (diffuseColor + ambientColor);
