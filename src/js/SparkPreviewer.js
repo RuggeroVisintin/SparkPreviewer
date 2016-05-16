@@ -205,7 +205,7 @@ function Application(canvas, debugCanvas) {
 	var updateRendering = function() 
 	{
 	    if (mRotate) {
-	    	Matrix4.rotateY(mModelViewMatrix, 0.001, mModelViewMatrix);
+	    	Matrix4.rotateX(mModelViewMatrix, 0.1, mModelViewMatrix);
 	    }
 		
 	    var mvp = Matrix4.create();
@@ -346,3 +346,4 @@ function SparkPreviewerMain() {
 
     return 0;
 }
+
