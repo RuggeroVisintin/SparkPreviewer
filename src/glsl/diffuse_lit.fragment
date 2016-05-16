@@ -108,4 +108,3 @@ void main(void)
 	//vec4 diffuseColor = lambert * vec4(lightColor, 1.0);
 	gl_FragColor = texel * phong + ambientColor;
 }
-
