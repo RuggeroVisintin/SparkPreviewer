@@ -1,0 +1,62 @@
+preicison medium float;
+
+uniform sampler2D   sampler;
+
+varying vec2        outUvs;
+varying vec3        outNormals;
+varying vec3        outPositions;
+
+vec3                LIGHT_POSITION = vec3(1.0, 0.0, 0.0);
+vec3                LIGHT_COLOR = vec3(1.0, 1.0, 1.0);
+float               SPECULAR_INTESITY = 16;
+float               DIFFUSE_INTENSITY = 1;
+
+float               AMBIENT_FACTOR = 0.05;
+vec3                MATERIAL_COLOR = vec3(1.0, 1.0, 1.0);
+
+vec3                VIEW_VEC = vec3(0.0, 0.0, 1.0);
+
+float               diffuse()
+{
+    vec3 normal = normalize(outNormals);
+    vec3 lightDir = normalize(LIGHT_POSITION - outPositions);
+    
+    float lambert = max(dot(lightDir, normal, 0.0);
+    
+    return diffuse * LIGHT_COLOR * DIFFUSE_INTENSITY;
+}
+
+float              specular()
+{
+    vec3 lightDir = normalize(LIGHT_POSITION - outPositions);
+
+    vec3 viewDir = normalize(-outPositions);
+    vec3 half = normalize(lightDir - viewDir);
+    
+    float specAngle = max(dot(halfDir, outNormals), 0.0);
+    
+    return pow(specAngle, SPECULAR_INTENSITY / 4.0);
+}
+
+vec3              blinnPhong()
+{
+  float diffuseFactor = diffuse();
+  float specularFactor = 0;
+  
+  if(diffuseFactor > 0.0)
+  {
+    specularFactor = specular();
+  }
+  
+  return vec3(0.05, 0.05, 0.05) + diffuseFactor * LIGHT_COLOR + specularFactor * LIGHT_COLOR;
+}
+
+void main()
+{
+  vec4 texel = texture2D(sampler, outUvs);
+
+  vec3 blinnPhong = blinnPhong();
+  
+  gl_FragColor = texel * vec3(blinnPhong, 1.0);
+}
+
