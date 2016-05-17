@@ -19,7 +19,7 @@ vec3                VIEW_VEC = vec3(0.0, 0.0, 1.0);
 float               diffuse()
 {
     vec3 normal = normalize(outNormals);
-    vec3 lightDir = normalize(LIGHT_POSITION - outPositions);
+    vec3 lightDir = normalize(LIGHT_POSITION - VIEW_VEC);
     
     float lambert = max(dot(lightDir, normal), 0.0);
     
@@ -28,9 +28,9 @@ float               diffuse()
 
 float              specular()
 {
-    vec3 lightDir = normalize(LIGHT_POSITION - outPositions);
+    vec3 lightDir = normalize(LIGHT_POSITION - VIEW_VEC);
 
-    vec3 viewDir = normalize(-outPositions);
+    vec3 viewDir = normalize(-VIEW_VEC);
     vec3 halfDir = normalize(lightDir - viewDir);
     
     float specAngle = max(dot(halfDir, outNormals), 0.0);
