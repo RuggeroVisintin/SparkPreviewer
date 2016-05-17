@@ -21,7 +21,7 @@ float               diffuse()
     vec3 normal = normalize(outNormals);
     vec3 lightDir = normalize(LIGHT_POSITION);
     
-    float lambert = max(dot(lightDir, normal), 0.0);
+    float lambert = max(0.0, dot(lightDir, normal));
     
     return lambert * DIFFUSE_INTENSITY;
 }
