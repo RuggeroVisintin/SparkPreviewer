@@ -23,7 +23,7 @@ float               diffuse()
     
     float lambert = max(dot(lightDir, normal), 0.0);
     
-    return lambert * LIGHT_COLOR * DIFFUSE_INTENSITY;
+    return lambert * DIFFUSE_INTENSITY;
 }
 
 float              specular()
