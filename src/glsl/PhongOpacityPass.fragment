@@ -1,4 +1,4 @@
-preicison medium float;
+precision medium float;
 
 uniform sampler2D   sampler;
 
