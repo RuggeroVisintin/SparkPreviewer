@@ -128,7 +128,7 @@ function Application(canvas, debugCanvas) {
 	};
 	
 	var initShaderPrograms = function () {
-	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/PhongOpacityPass.fragment", renderer.getGfx(), function (result) {
+	    initShaderFromFile("src/glsl/global.vertex", "src/glsl/diffuse_lit.fragment", renderer.getGfx(), function (result) {
 	        litShaderProgram = result;
 	        mCurrentShaderProgram = litShaderProgram;
 	    });
