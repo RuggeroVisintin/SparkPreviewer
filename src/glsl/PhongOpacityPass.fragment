@@ -45,7 +45,7 @@ vec3              blinnPhong()
     specularFactor = specular();
   }
   
-  return vec3(0.05, 0.05, 0.05) + diffuseFactor * LIGHT_COLOR + specularFactor * LIGHT_COLOR;
+  return vec3(0.05, 0.05, 0.05) + diffuseFactor * LIGHT_COLOR/* + specularFactor * LIGHT_COLOR*/;
 }
 
 void main()
