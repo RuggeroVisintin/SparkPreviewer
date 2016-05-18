@@ -346,4 +346,3 @@ function SparkPreviewerMain() {
 
     return 0;
 }
-
