@@ -16,9 +16,9 @@ vec4 			calcPhong()
 	float diffuseFactor;
 	
 	if(gl_FrontFacing) {
-		diffuseFactor = dot(normalize(normals), lightDirection);
+		diffuseFactor = dot(normalize(outNormals), lightDirection);
 	} else {
-		diffuseFactor = dot(-normalize(normals), lightDirection);
+		diffuseFactor = dot(-normalize(outNormals), lightDirection);
 	}
 	
 	float specularFactor = 0.0;
