@@ -11,25 +11,34 @@ vec3			lightDirection = vec3(1.0, 0.0, 0.0);
 vec3			lightColor = vec3(1.0, 1.0, 1.0);
 vec4 			ambientColor = vec4(0.05, 0.05, 0.05, 1.0);
 
-vec4 			calcPhong(in vec3 normals, in vec3 lightDirection, in vec3 lightColor)
+vec4 			calcPhong()
 {
 	float diffuseFactor;
-
+	
 	if(gl_FrontFacing) {
 		diffuseFactor = dot(normalize(normals), lightDirection);
 	} else {
 		diffuseFactor = dot(-normalize(normals), lightDirection);
 	}
 	
-	vec4 diffuseColor = max(0.0, diffuseFactor) * vec4(lightColor, 1.0);
+	float specularFactor = 0.0;
 	
+	if(diffuseFactor > 0.0)
+	{
+		vec3 halfDir = normalize(lightDirection + vec3(0.0, 0.0, 1.0));
+	    	float NdotH = max(dot(normalize(outNormals), halfDir), 0.0);
+	    
+	    	specularFactor = pow(NdotH, SPECULAR_INTENSITY);
+    	}
+	
+	vec3 diffuseColor = (max(0.0, diffuseFactor) + specularFactor) * lightColor;
 	return diffuseColor;
 }
 
 void main(void) 
 {
 	vec4 texel = texture2D(sampler, outUvs);
-	vec4 phong = calcPhong(outNormals, lightDirection, lightColor);
+	vec3 phong = calcPhong();
 	
 	if(texel.a < 1.0) discard;
 
