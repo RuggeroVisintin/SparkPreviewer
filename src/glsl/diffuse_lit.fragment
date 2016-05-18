@@ -28,7 +28,7 @@ vec4 			calcPhong()
 		vec3 halfDir = normalize(lightDirection + vec3(0.0, 0.0, 1.0));
 	    	float NdotH = max(dot(normalize(outNormals), halfDir), 0.0);
 	    
-	    	specularFactor = pow(NdotH, SPECULAR_INTENSITY);
+	    	specularFactor = pow(NdotH, 16);
     	}
 	
 	vec3 diffuseColor = (max(0.0, diffuseFactor) + specularFactor) * lightColor;
