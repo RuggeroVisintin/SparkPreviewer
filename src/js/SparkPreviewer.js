@@ -197,8 +197,8 @@ function Application(canvas, debugCanvas) {
 	        mCurrentShaderProgram = litShaderProgram;
 	    } else if (event.keyCode == 50) {
 	        mCurrentShaderProgram = normalShaderProgram;
-	    } else {
-	    	mRotate = !mRotate;
+	    //} else {
+	    //	mRotate = !mRotate;
 	    }
 	}
 
